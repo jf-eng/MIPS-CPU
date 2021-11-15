@@ -1,0 +1,23 @@
+#! /usr/local/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1149-ge3c22348)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/local/lib/ivl/system.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/local/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/local/lib/ivl/v2005_math.vpi";
+:vpi_module "/usr/local/lib/ivl/va_math.vpi";
+:vpi_module "/usr/local/lib/ivl/v2009.vpi";
+S_0x7fffd1573260 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_0x7fffd15733f0 .scope module, "regfile_tb" "regfile_tb" 3 1;
+ .timescale 0 0;
+S_0x7fffd1597260 .scope module, "dut" "regfile" 3 3, 4 1 0, S_0x7fffd15733f0;
+ .timescale 0 0;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "regfile_tb.v";
+    "regfile.v";
