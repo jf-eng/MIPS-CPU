@@ -1,0 +1,123 @@
+$date
+	Mon Nov 15 16:04:18 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module regfile_tb $end
+$var wire 32 ! read_data_1 [31:0] $end
+$var wire 32 " read_data_0 [31:0] $end
+$var reg 1 # clk $end
+$var reg 5 $ read_addr_0 [4:0] $end
+$var reg 5 % read_addr_1 [4:0] $end
+$var reg 1 & reset $end
+$var reg 1 ' wen $end
+$var reg 5 ( write_addr [4:0] $end
+$var reg 32 ) write_data [31:0] $end
+$scope module dut $end
+$var wire 1 # clk $end
+$var wire 5 * read_addr_0 [4:0] $end
+$var wire 5 + read_addr_1 [4:0] $end
+$var wire 1 & reset $end
+$var wire 1 ' wen $end
+$var wire 5 , write_addr [4:0] $end
+$var wire 32 - write_data [31:0] $end
+$var reg 32 . read_data_0 [31:0] $end
+$var reg 32 / read_data_1 [31:0] $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 0 i [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx 0
+b0 /
+b0 .
+b0 -
+b0 ,
+b0 +
+b0 *
+b0 )
+b0 (
+0'
+0&
+b0 %
+b0 $
+0#
+b0 "
+b0 !
+$end
+#2
+1#
+#4
+1&
+0#
+#6
+b100000 0
+1#
+#8
+0&
+0#
+#10
+1#
+#12
+b11 $
+b11 *
+b11 (
+b11 ,
+b1111011 )
+b1111011 -
+1'
+0#
+#14
+b1111011 "
+b1111011 .
+1#
+#16
+0'
+0#
+#18
+1#
+#20
+b1111011 !
+b1111011 /
+b11 %
+b11 +
+0#
+#22
+1#
+#24
+0#
+#26
+1#
+#28
+b0 "
+b0 .
+b0 $
+b0 *
+b0 (
+b0 ,
+b1101111 )
+b1101111 -
+1'
+0#
+#30
+1#
+#32
+0'
+0#
+#34
+1#
+#36
+0#
+#38
+1#
+#40
+0#
+#42
+1#
