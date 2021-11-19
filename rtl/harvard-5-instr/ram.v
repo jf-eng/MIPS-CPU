@@ -1,5 +1,0 @@
-module ram (
-	ports
-);
-	
-endmodule

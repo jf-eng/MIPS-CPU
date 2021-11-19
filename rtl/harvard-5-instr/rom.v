@@ -1,5 +1,0 @@
-module rom (
-	ports
-);
-	
-endmodule
