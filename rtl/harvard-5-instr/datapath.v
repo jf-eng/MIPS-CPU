@@ -1,34 +1,32 @@
 module datapath(
-	input logic clk,
-	input logic RegDst, MemtoReg,
+	input logic clk, reset,
+	input logic RegDst, MemtoReg,ALUSrc,RegWrite,
 	input logic[4:0] rs, rt, rd,
+    input logic[5:0] func_code,ALUOp,
 	input logic[15:0] alu_immediate,
-	input logic jump, addiu, addu, lw, sw,
-	output logic[31:0] data_address, data_writedata,
 	input logic[31:0] data_readdata,
-	output logic data_read, data_write
+	output logic[31:0] data_address, data_writedata, reg_read_data_0
 );
 
 	// REGFILE INPUTS
-	logic clk, wen, reset;
-	logic[31:0] write_data;
-	logic[4:0] write_addr;
-	logic[4:0] read_addr_0, read_addr_1;
+	logic[31:0] reg_write_data;
+	logic[4:0] reg_write_addr;
+	logic[4:0] reg_read_addr_0, reg_read_addr_1;
 
 	// REGFILE OUTPUTS
-	logic[31:0] read_data_0, read_data_1;
+	logic[31:0] reg_read_data_1;
 
-	assign read_addr_0 = rs;
-	assign read_addr_1 = rt;
-	assign write_addr = (RegDst) ? rd : rt;
+	assign reg_read_addr_0 = rs;
+	assign reg_read_addr_1 = rt;
+	assign reg_write_addr = (RegDst) ? rd : rt;
 
 
 	//REGFILE
 	regfile regfile_0(
-		.clk(clk), .wen(wen), .reset(reset),
-		.write_data(write_data), .write_addr(write_addr),
-		.read_addr_0(read_addr_0), .read_addr_1(read_addr_1),
-		.read_data_0(read_data_0), .read_data_1(read_data_1)
+		.clk(clk), .wen(RegWrite), .reset(reset),
+		.write_data(reg_write_data), .write_addr(reg_write_addr),
+		.read_addr_0(reg_read_addr_0), .read_addr_1(reg_read_addr_1),
+		.read_data_0(reg_read_data_0), .read_data_1(reg_read_data_1)
 	);
 
 	logic [31:0] sign_extended;
@@ -37,21 +35,21 @@ module datapath(
 	//ALU
 	logic add;
 	logic[31:0] alu_out;
-	assign add = (addiu || addu) ? 1 : 0;
 	logic[31:0] op2;
-	assign op2 = ALUSrc ? read_data_1 : sign_extended;
+	assign op2 = ALUSrc ? reg_read_data_1 : sign_extended;
 	alu alu_0(
-		.op1(rs),
+		.op1(reg_read_data_0),
 		.op2(op2),
-		.add(add),
+		.ALUOp(ALUOp),
+		.func_code(func_code),
 		.alu_out(alu_out)
 	);
 
 	// WRAP AROUND RAM
 	assign data_address = alu_out;
-	assign data_writedata = read_data_1;
+	assign data_writedata = reg_read_data_1;
 	
-	assign write_data = (MemtoReg) ? data_readdata : alu_out;  
+	assign reg_write_data = (MemtoReg) ? data_readdata : alu_out;  
 
 
 
