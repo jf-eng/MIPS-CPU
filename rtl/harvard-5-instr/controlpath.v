@@ -2,6 +2,7 @@ module controlpath (
 	input logic[31:0] read_data, // from memory bus
 	input logic[31:0] register_content, // from regfile
 	input logic clk,
+	output logic[15:0] alu_immediate,
 	output logic[4:0] rs, rd, rt,
 	output logic RegDst,
 	output logic Branch,
@@ -23,7 +24,8 @@ module controlpath (
 		.instruction_word(instruction_word), //output
 		.rs(rs), //output
 		.rd(rd), //output
-		.rt(rt) //output
+		.rt(rt), //output
+		.alu_immediate(alu_immediate) //output
 	);
 
 	pc pcblock(
