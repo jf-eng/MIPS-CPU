@@ -1,0 +1,5 @@
+module controlpath (
+	ports
+);
+	
+endmodule
