@@ -34,7 +34,7 @@ module control (
         end
         
         else if (instruction_opcode == 6'b100011) begin // LW: opcode 0x23
-            RegDst = 1;
+            RegDst = 0;
             Branch = 0;
             MemRead = 1; // we want to read from data memory, 
             MemtoReg = 1; // pass data mem to reg
@@ -54,7 +54,7 @@ module control (
         end
 
         else if (instruction_opcode == 6'b101011) begin // SW
-            RegDst = 1;
+            RegDst = 1; //dont care
             Branch = 0;
             MemRead = 0;
             MemtoReg = 0; // dont care

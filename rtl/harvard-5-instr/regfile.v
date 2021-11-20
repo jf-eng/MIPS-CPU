@@ -7,7 +7,7 @@ module regfile (
 	output logic[31:0] register_v0
 );
 
-	reg [31:0] regs [31:0];
+	reg [31:0] regs [0:31];
 
 	assign register_v0 = regs[2];
 
@@ -18,7 +18,7 @@ module regfile (
 			end
 		end
 		if(wen == 1) begin
-			regs[write_addr] = (write_addr == 0) ? 0 : write_data;
+			regs[write_addr] <= (write_addr == 0) ? 0 : write_data;
 		end
 	end
 

@@ -14,7 +14,7 @@ module pc (
 		if(reset) begin
 			addr <= 32'hBFC00000;
 		end else begin
-			addr <= addr_next;		
+			addr <= addr_next;
 		end
 	end
 
