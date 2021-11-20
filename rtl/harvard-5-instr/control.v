@@ -1,7 +1,7 @@
 module control ( 
     input logic [5:0] instruction_opcode,
     input logic [5:0] func_code, 
-
+    input logic state,
     // active high control lines
     output logic RegDst, // choose rd as destination over rt
     output logic Branch, // tell pc to branch
@@ -23,58 +23,85 @@ module control (
 
 
     always_comb begin
-        if (instruction_opcode == 0) begin // ADDU & JR r-type instruction
-            RegDst = 1;
-            Branch = (func_code == 6'b001000) ? 1 : 0;
-            MemRead = 0;
-            MemtoReg = 0;
+        if (!state) begin 
+            RegDst = 0; //dont care
+            Branch = 0;
+            MemRead = 1;
+            MemtoReg = 0; //dont care
             MemWrite = 0;
-            ALUSrc = 0;
-            RegWrite = (func_code == 6'b001000) ? 0 : 1;
-        end
-        
-        else if (instruction_opcode == 6'b100011) begin // LW: opcode 0x23
-            RegDst = 0;
-            Branch = 0;
-            MemRead = 1; // we want to read from data memory, 
-            MemtoReg = 1; // pass data mem to reg
-            MemWrite = 0; // we don't want to write memory
-            ALUSrc = 1; // immediate offset as op2 of alu
-            RegWrite = 1; // we want to write a register
-        end
-
-        else if (instruction_opcode == 6'b001001) begin // ADDIU
-            RegDst = 0; 
-            Branch = 0;
-            MemRead = 0;
-            MemtoReg = 0;
-            MemWrite = 0;
-            ALUSrc = 1; 
-            RegWrite = 1; 
-        end
-
-        else if (instruction_opcode == 6'b101011) begin // SW
-            RegDst = 1; //dont care
-            Branch = 0;
-            MemRead = 0;
-            MemtoReg = 0; // dont care
-            //ALUOp = 0;
-            MemWrite = 1;
-            ALUSrc = 1; // immediate offset as op2 of alu
+            ALUSrc = 0; //dont care
             RegWrite = 0;
-        end
-        
-        else begin // catch all case for easy debugging
-            RegDst = 1'bx;
-            Branch = 1'bx;
-            MemRead = 1'bx;
-            MemtoReg = 1'bx;
-            MemWrite = 1'bx;
-            ALUSrc = 1'bx;
-            RegWrite = 1'bx;
+        end else begin
+            case(instruction_opcode)
+            0: begin // ADDU & JR r-type instruction
+                RegDst = 1;
+                Branch = (func_code == 6'b001000) ? 1 : 0;
+                MemRead = 0;
+                MemtoReg = 0;
+                MemWrite = 0;
+                ALUSrc = 0;
+                RegWrite = (func_code == 6'b001000) ? 0 : 1;
+            end
+            6'b100011: begin RegDst = 0; Branch = 0; MemRead = 1; MemtoReg = 1; MemWrite = 0; ALUSrc = 1; RegWrite = 1; end
+            6'b001001: begin
+                RegDst = 0; 
+                Branch = 0;
+                MemRead = 0;
+                MemtoReg = 0;
+                MemWrite = 0;
+                ALUSrc = 1; 
+                RegWrite = 1;
+            end
+            6'b101011: begin
+                
+                
+            end
+
+            endcase
         end
     end
 endmodule
+  
+        // else if (instruction_opcode == 6'b100011) begin // LW: opcode 0x23
+        //     RegDst = 0;
+        //     Branch = 0;
+        //     MemRead = 1; // we want to read from data memory, 
+        //     MemtoReg = 1; // pass data mem to reg
+        //     MemWrite = 0; // we don't want to write memory
+        //     ALUSrc = 1; // immediate offset as op2 of alu
+        //     RegWrite = 1; // we want to write a register
+        // end
+
+        // else if (instruction_opcode == 6'b001001) begin // ADDIU
+        //     RegDst = 0; 
+        //     Branch = 0;
+        //     MemRead = 0;
+        //     MemtoReg = 0;
+        //     MemWrite = 0;
+        //     ALUSrc = 1; 
+        //     RegWrite = 1; 
+        // end
+
+        // else if (instruction_opcode == 6'b101011) begin // SW
+        //     RegDst = 1; //dont care
+        //     Branch = 0;
+        //     MemRead = 0;
+        //     MemtoReg = 0; // dont care
+        //     //ALUOp = 0;
+        //     MemWrite = 1;
+        //     ALUSrc = 1; // immediate offset as op2 of alu
+        //     RegWrite = 0;
+        // end
+        
+        // else begin // catch all case for easy debugging
+        //     RegDst = 1'bx;
+        //     Branch = 1'bx;
+        //     MemRead = 1'bx;
+        //     MemtoReg = 1'bx;
+        //     MemWrite = 1'bx;
+        //     ALUSrc = 1'bx;
+        //     RegWrite = 1'bx;
+        // end
         /* 
         else if (instruction_opcode == 6'b00001?) begin // J-type instruction; not needed for now 
             RegDst = 0;
