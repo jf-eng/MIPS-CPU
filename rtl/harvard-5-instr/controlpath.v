@@ -3,7 +3,7 @@ module controlpath (
 	input logic[31:0] reg_read_data_0, // from regfile for JR
 	input logic clk, reset,
 	output logic[15:0] alu_immediate,
-	output logic[4:0] rs, rd, rt,
+	output logic[4:0] rs, rd, rt, shamt,
 	output logic RegDst,
 	output logic Branch,
 	output logic MemtoReg,
@@ -25,6 +25,7 @@ module controlpath (
 		.rs(rs), //output
 		.rd(rd), //output
 		.rt(rt), //output
+		.shamt(shamt), // output
 		.alu_immediate(alu_immediate), //output
 		.func_code(func_code) //output
 	);

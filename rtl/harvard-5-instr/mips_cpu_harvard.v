@@ -20,7 +20,7 @@ module mips_cpu_harvard(
     input logic[31:0]  data_readdata
 );
     //intermediate signals
-    logic[4:0] rs, rt, rd;
+    logic[4:0] rs, rt, rd, shamt;
     logic RegDst, Branch, MemtoReg, ALUSrc, RegWrite;
     logic[15:0] alu_immediate;
     logic[31:0] reg_read_data_0;
@@ -35,6 +35,7 @@ module mips_cpu_harvard(
         .rs(rs), //output
         .rd(rd), //output
         .rt(rt),//output
+        .shamt(shamt),
 	    .RegDst(RegDst),//output
 	    .Branch(Branch),//output
 	    .MemtoReg(MemtoReg),//output
