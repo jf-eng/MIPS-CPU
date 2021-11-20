@@ -6,7 +6,7 @@ module mips_cpu_harvard(
     output logic [31:0] register_v0, 
 
     /* New clock enable. See below. */
-    input logic     clk_enable, //not implemented yet
+    input logic     clk_enable,
 
     /* Combinatorial read access to instructions */
     output logic[31:0]  instr_address,
