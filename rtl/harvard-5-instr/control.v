@@ -43,7 +43,7 @@ module control (
                 RegWrite = (func_code == 6'b001000) ? 0 : 1;
             end
             6'b100011: begin RegDst = 0; Branch = 0; MemRead = 1; MemtoReg = 1; MemWrite = 0; ALUSrc = 1; RegWrite = 1; end
-            6'b001001: begin
+            6'b001001: begin // ADDIU
                 RegDst = 0; 
                 Branch = 0;
                 MemRead = 0;
@@ -52,11 +52,25 @@ module control (
                 ALUSrc = 1; 
                 RegWrite = 1;
             end
-            6'b101011: begin
-                
-                
+            6'b101011: begin //SW
+                RegDst = 1; //dont care
+                Branch = 0;
+                MemRead = 0;
+                MemtoReg = 0; // dont care
+                //ALUOp = 0;
+                MemWrite = 1;
+                ALUSrc = 1; // immediate offset as op2 of alu
+                RegWrite = 0;
             end
-
+            default: begin
+                RegDst = 1'bx;
+                Branch = 1'bx;
+                MemRead = 1'bx;
+                MemtoReg = 1'bx;
+                MemWrite = 1'bx;
+                ALUSrc = 1'bx;
+                RegWrite = 1'bx;
+            end
             endcase
         end
     end
@@ -83,24 +97,9 @@ endmodule
         // end
 
         // else if (instruction_opcode == 6'b101011) begin // SW
-        //     RegDst = 1; //dont care
-        //     Branch = 0;
-        //     MemRead = 0;
-        //     MemtoReg = 0; // dont care
-        //     //ALUOp = 0;
-        //     MemWrite = 1;
-        //     ALUSrc = 1; // immediate offset as op2 of alu
-        //     RegWrite = 0;
         // end
         
         // else begin // catch all case for easy debugging
-        //     RegDst = 1'bx;
-        //     Branch = 1'bx;
-        //     MemRead = 1'bx;
-        //     MemtoReg = 1'bx;
-        //     MemWrite = 1'bx;
-        //     ALUSrc = 1'bx;
-        //     RegWrite = 1'bx;
         // end
         /* 
         else if (instruction_opcode == 6'b00001?) begin // J-type instruction; not needed for now 

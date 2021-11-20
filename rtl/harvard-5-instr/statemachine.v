@@ -7,9 +7,10 @@ module statemachine(
     assign state_next = !state;
 
     always_ff@(posedge clk) begin
-        if(reset) 
+        if(reset)
             state <= 0;
-        state <= state_next;
+        else
+            state <= state_next;
     end
 
 endmodule
