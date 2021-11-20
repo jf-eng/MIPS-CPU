@@ -35,40 +35,77 @@ module mips_cpu_harvard_tb();
         .data_write(data_write),
         .data_read(data_read),
         .data_writedata(data_writedata),
-        .data_readdata(data_readdata),
-        .instruction_word(instruction_word)
+        .data_readdata(data_readdata)
     );
     
     initial begin
+        $dumpfile("mips_cpu_harvard_tb.vcd");
+        $dumpvars(0, mips_cpu_harvard_tb);
         clk = 0;
-        repeat (100) begin
-        #2;
-        clk = !clk;
+        repeat (200) begin
+            #2;
+            clk = !clk;
         end
-        $finish(0);
+        $fatal(2, "Simulation ended in 100 clock cycles");
     end
 
+    reg [31:0] rom [0:255];
+    reg [31:0] ram [0:255];
+
+    parameter ROM_INIT_FILE = "test1_rom.mem";
+    parameter RAM_INIT_FILE = "test1_ram.mem";
+
+    // RAM ROM initialisation
     initial begin
-        instruction_word = 32'b00100101010000100000000001000101;
-        @(posedge clk) begin
-            repeat(10) begin
-                #1;
-                assert (destination_register_data == source_register_1_data + instruction_word[15:0]);
-                instruction_word[15:0] += 16'h1235;
-            end
+        for(integer i = 0; i < 255; i=i+1) begin
+            rom[i] = 0;
+            ram[i] = 0;
+        end
+
+        if (ROM_INIT_FILE != "") begin
+            $display("ROM : INIT : Loading RAM contents from %s", RAM_INIT_FILE);
+            $readmemb(ROM_INIT_FILE, rom);
+        end
+
+        if (RAM_INIT_FILE != "") begin
+            $display("RAM : INIT : Loading RAM contents from %s", RAM_INIT_FILE);
+            $readmemh(RAM_INIT_FILE, ram);
         end
     end
+
+    // ROM and RAM READ
+    assign instr_readdata = (instr_address[31:8] == 24'hBFC000) ? rom[instr_address[7:0]] : 32'hxxxxxxxx;
+    assign data_readdata = (data_read && data_address[31:8] == 24'h000000) ? ram[data_address[7:0]] : 32'hxxxxxxxx;
+
+    // RAM WRITE
+    always_ff @(posedge clk) begin
+        if(data_write && data_address[31:8] == 24'h000000) begin
+            ram[data_address[7:0]] <= data_writedata;
+        end
+    end
+
+    // TESTING
+    initial begin
+        @(negedge clk);
+        @(negedge clk);
+        @(negedge clk);
+        @(negedge clk);
+        @(negedge clk);
+
+        $finish;
+    end
+
+
+    // initial begin
+    //     // instruction_word = 32'b00100101010000100000000001000101;
+    //     @(posedge clk) begin
+    //         repeat(10) begin
+    //             #1;
+    //             assert (destination_register_data == source_register_1_data + instruction_word[15:0]);
+    //             instruction_word[15:0] += 16'h1235;
+    //         end
+    //     end
+    // end
 
 endmodule
-
-//JR $10:
-//00000001010000000000000000001000
-//ADDU $2, $3, $3:
-//00000000011001000001000000010101
-//ADDIU $10, $2, 69:
-//00100101010000100000000001000101
-//LW $8, $7:
-//10001101000001110000000000000000
-//SW $2, $4:
-//10101100100000100000000000000000
 
