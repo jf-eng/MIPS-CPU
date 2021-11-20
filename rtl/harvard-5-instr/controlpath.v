@@ -39,6 +39,7 @@ module controlpath (
 
 	control controlblock(
 		.instruction_opcode(instruction_opcode), //input
+		.func_code(func_code),
 		.RegDst(RegDst), //output
 		.Branch(Branch), //output
 		.MemRead(data_read), //output

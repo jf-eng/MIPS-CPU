@@ -7,7 +7,7 @@ module pc (
 
 	logic [31:0] addr_next;
 
-	assign addr_next = addr + 4;
+	assign addr_next = (immediate) ? Rd : addr + 4;
 
 	always_ff @(posedge clk) begin
 		if(reset) begin

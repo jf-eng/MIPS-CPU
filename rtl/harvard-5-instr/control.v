@@ -1,5 +1,6 @@
 module control ( 
     input logic [5:0] instruction_opcode,
+    input logic [5:0] func_code,
     output logic RegDst,
     output logic Branch,
     output logic MemRead,
@@ -14,7 +15,7 @@ module control (
         ALUOp = instruction_opcode;
         if (instruction_opcode == 0) begin
             RegDst = 1;
-            Branch = 1;
+            Branch = (func_code == 6'b001000) ? 1 : 0;
             MemRead = 0;
             MemtoReg = 0;
             //ALUOp = 1;

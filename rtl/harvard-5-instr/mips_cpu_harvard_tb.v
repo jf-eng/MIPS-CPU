@@ -52,7 +52,7 @@ module mips_cpu_harvard_tb();
     reg [31:0] rom [0:255];
     reg [31:0] ram [0:255];
 
-    parameter ROM_INIT_FILE = "test1_rom.mem";
+    parameter ROM_INIT_FILE = "test0_rom.mem";
     parameter RAM_INIT_FILE = "test1_ram.mem";
 
     // RAM ROM initialisation
@@ -63,7 +63,7 @@ module mips_cpu_harvard_tb();
         end
 
         if (ROM_INIT_FILE != "") begin
-            $display("ROM : INIT : Loading RAM contents from %s", RAM_INIT_FILE);
+            $display("ROM : INIT : Loading RAM contents from %s", ROM_INIT_FILE);
             $readmemb(ROM_INIT_FILE, rom);
         end
 
@@ -74,8 +74,12 @@ module mips_cpu_harvard_tb();
     end
 
     // ROM and RAM READ
-    assign instr_readdata = (instr_address[31:8] == 24'hBFC000) ? rom[instr_address[7:0]] : 32'hxxxxxxxx;
-    assign data_readdata = (data_read && data_address[31:8] == 24'h000000) ? ram[data_address[7:0]] : 32'hxxxxxxxx;
+    logic [7:0] rom_wordaddr, ram_wordaddr;
+    assign rom_wordaddr = instr_address[7:0] >> 2;
+    assign ram_wordaddr = data_address[7:0] >> 2;
+
+    assign instr_readdata = (instr_address[31:8] == 24'hBFC000) ? rom[rom_wordaddr] : 32'hxxxxxxxx;
+    assign data_readdata = (data_read && data_address[31:8] == 24'h000000) ? ram[ram_wordaddr] : 32'hxxxxxxxx;
 
     // RAM WRITE
     always_ff @(posedge clk) begin
@@ -87,14 +91,14 @@ module mips_cpu_harvard_tb();
     // TESTING
     initial begin
         reset = 0;
-        $monitor("[ROM] PC: %h, Instruction: %h", instr_address, instr_readdata);
+        $monitor("[ROM] PC: %h, WordADDR: %h, Instruction: %h", instr_address, rom_wordaddr, instr_readdata);
         @(negedge clk);
         reset = 1;
         @(negedge clk);
         reset = 0;
         @(negedge clk);
-        @(negedge clk);
-        @(negedge clk);
+
+        #20;
 
         $finish;
     end
