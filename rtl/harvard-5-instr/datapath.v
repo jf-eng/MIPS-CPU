@@ -18,7 +18,7 @@ module datapath(
 
 	assign reg_read_addr_0 = rs;
 	assign reg_read_addr_1 = rt;
-	assign reg_write_addr = (RegDst) ? rd : rt;
+	assign reg_write_addr = (RegDst) ? rt : rd;
 
 
 	//REGFILE
@@ -36,7 +36,7 @@ module datapath(
 	logic add;
 	logic[31:0] alu_out;
 	logic[31:0] op2;
-	assign op2 = ALUSrc ? reg_read_data_1 : sign_extended;
+	assign op2 = (ALUSrc) ? sign_extended : reg_read_data_1;
 	alu alu_0(
 		.op1(reg_read_data_0),
 		.op2(op2),

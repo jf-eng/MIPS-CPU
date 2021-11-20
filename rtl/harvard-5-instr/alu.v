@@ -9,11 +9,25 @@ module alu(
 	logic[11:0] alu_control; // concatenation of opcode and function code
 
 	always_comb begin
-		alu_control = {ALUOp, func_code};
-		casex (alu_control)
-			(12'b000000100001 || 12'b001001??????): alu_out = op1 + op2;
-			default: alu_out = 12'hxxx;
-		endcase
+		if(ALUOp == 6'b000000) begin
+			if(func_code == 6'b100001)
+				alu_out = op1 + op2; // ADDU
+				alu_out = op1 + op2; // JR
+		end
+		else begin
+			casex (ALUOp)
+				6'b001001: alu_out = op1 + op2; // ADDIU
+				6'b100011: alu_out = op1 + op2; // LW
+				6'b101011: alu_out = op1 + op2; // SW
+				default: alu_out = 32'hxxxxxxxx;
+			endcase
+		end
+
+		// alu_control = {ALUOp, func_code};
+		// casex (alu_control)
+		// 	(12'b000000100001 || 12'b001001??????): alu_out = op1 + op2;
+		// 	default: alu_out = 12'hxxx;
+		// endcase
 	end
 	
 endmodule

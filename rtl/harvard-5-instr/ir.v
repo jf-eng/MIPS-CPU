@@ -12,6 +12,7 @@ module ir(
         instruction_word = read_data; // need to change for bus interface, add mux and IR reg
         rs = instruction_word[25:21];
         rt = instruction_word[20:16];
+        rd = instruction_word[15:11];
         alu_immediate = instruction_word[15:0];
         func_code = instruction_word[5:0];
 
