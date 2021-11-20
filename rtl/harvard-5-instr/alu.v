@@ -12,7 +12,7 @@ module alu(
 		if(ALUOp == 6'b000000) begin
 			if(func_code == 6'b100001) begin
 				alu_out = op1 + op2; // ADDU
-				alu_out = op1 + op2; // JR
+				alu_out = 0; // JR
 			end
 		end
 		else begin

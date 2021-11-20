@@ -11,7 +11,7 @@ module controlpath (
 	output logic ALUSrc,
 	output logic RegWrite,
 	output logic[31:0] instr_read_addr,
-    output logic[5:0] func_code,
+  output logic[5:0] func_code,
 	output logic data_read, data_write,
 	output logic cpu_halt
 );

@@ -2,7 +2,7 @@ module datapath(
 	input logic clk, reset,
 	input logic RegDst, MemtoReg,ALUSrc,RegWrite,
 	input logic[4:0] rs, rt, rd,
-    input logic[5:0] func_code,ALUOp,
+  input logic[5:0] func_code,ALUOp,
 	input logic[15:0] alu_immediate,
 	input logic[31:0] data_readdata,
 	output logic[31:0] data_address, data_writedata, reg_read_data_0,
