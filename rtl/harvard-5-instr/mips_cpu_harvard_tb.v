@@ -86,8 +86,12 @@ module mips_cpu_harvard_tb();
 
     // TESTING
     initial begin
+        reset = 0;
+        $monitor("[ROM] PC: %h, Instruction: %h", instr_address, instr_readdata);
         @(negedge clk);
+        reset = 1;
         @(negedge clk);
+        reset = 0;
         @(negedge clk);
         @(negedge clk);
         @(negedge clk);

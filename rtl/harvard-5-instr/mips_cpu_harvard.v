@@ -30,7 +30,7 @@ module mips_cpu_harvard(
     controlpath controlpathblock(
         .instr_read_data(instr_readdata), //input 
         .reg_read_data_0(reg_read_data_0), //input 
-        .clk(clk),//input
+        .clk(clk), .reset(reset),//input
         .alu_immediate(alu_immediate),//output
         .rs(rs), //output
         .rd(rd), //output
@@ -68,11 +68,11 @@ module mips_cpu_harvard(
     );
 
 // BFC0 0000
-//       |
-// BFC0 FFFF
-// reg [31:0] ram [4294967296 - 1:0]; this is what we want
+//         |
+// BFC0 00FF
+// reg [31:0] ram [0:4294967296 - 1]; this is what we want
 
-// reg [31:0] ram [65536 - 1:0];
+// reg [31:0] ram [0:255]; this is what we have at home
 
 
 

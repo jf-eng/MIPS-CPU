@@ -1,7 +1,7 @@
 module controlpath (
 	input logic[31:0] instr_read_data, // from memory bus
 	input logic[31:0] reg_read_data_0, // from regfile for JR
-	input logic clk,
+	input logic clk, reset,
 	output logic[15:0] alu_immediate,
 	output logic[4:0] rs, rd, rt,
 	output logic RegDst,
@@ -30,6 +30,7 @@ module controlpath (
 	);
 
 	pc pcblock(
+		.reset(reset),
 		.immediate(Branch), // PROB A BUG HERE... more logic may be needed within PC block; input
 		.Rd(reg_read_data_0), //register content for immediate addressing; input
 		.clk(clk), //clock; input
