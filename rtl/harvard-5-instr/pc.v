@@ -5,6 +5,7 @@ module pc (
 	output logic [31:0] addr //the output address
 );
 
+
 	logic [31:0] addr_next;
 
 	assign addr_next = (halt || !state) ? addr : 
