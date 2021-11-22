@@ -121,7 +121,7 @@ def assemble(filepath):
 	for line in lines:
 		binlines.append(parse_line(line) + " // " + line + "\n")
 	# print(binlines)
-	outpath = os.path.splitext(filepath)[0] + ".s"
+	outpath = os.path.splitext(filepath)[0] + ".mem"
 	outF = open(outpath, 'w')
 	outF.writelines(binlines)
 	print("Output written to " + outpath)
