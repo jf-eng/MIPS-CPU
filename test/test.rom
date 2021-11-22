@@ -1,0 +1,17 @@
+JR $2
+MTHI $2
+MTLO $2
+DIV $1, $2
+MULT $3, $7
+SLL $4, $4, #12
+JALR $3
+JALR $20 $3
+J #1025
+JAL #0x1234
+BGEZ $4 #0x35
+JR $0
+BEQ $2 $3 #0x234
+BLEZ $2 #0x234
+ADDIU $31 $2 #0x67
+LW $4 #24($5)
+LW $4 24($5)
