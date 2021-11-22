@@ -3,6 +3,8 @@
 
     There are 12 branch/jump instructions in total.
 
+    Take note that JALR (Jump and link register) is the only link instruction that stores PC+8 in Rd instead of $31
+
     New control logic [1:0] jump_addr_selection is defined as such
         if 00: no jump;
         if 01: absolute jump (JR,JALR);
@@ -16,11 +18,9 @@ module branch_control(
     input logic N, // high if alu_out is negative
     input logic Z, // high if alu_out is zero
     input logic[31:0] instruction_word, //taking in the entire word bc of repeated branch opcodes like JALR,JR,BGEZ,BGEZAL,BLTZ,BLTZAL
-    // input logic R31, //taken from control.v; high for link instructions; not needed actually
     input logic state,
     input logic clk,
 
-    // output logic Branch, // high if we want the PC to jump in the next fetch
     output logic B_link, // high if we want the PC+8 addr to be stored in $31
     output logic [1:0] jump_addr_selection // defined above
 );
@@ -31,7 +31,7 @@ module branch_control(
         case (instruction_word[31:26]) // opcodes
             0: begin
                 if (instruction_word[5:0] == 6'b001001) begin // JALR
-                    jump_addr_selection_next = 2'b01; B_link = 1; 
+                    jump_addr_selection_next = 2'b01; B_link = 0; // B_link is set 0 here so that Rd is fed into reg_write_address; RegWrite should = 1 in control.v
                 end
                 else if (instruction_word[5:0] == 6'b001000) begin // JR
                     jump_addr_selection_next = 2'b01; B_link = 0; 
@@ -91,12 +91,9 @@ module branch_control(
 
     // at every EXEC, update FF
     // delay needed so that PC only jumps after branch delay slot
-    // still bugged altho jump_addr_selection is correct now
-    logic [31:0] tmp;
     always_ff @(posedge clk) begin
-        if (state) begin
-            jump_addr_selection <= tmp;
-            tmp <= jump_addr_selection_next;
+        if (state) begin // update jump_addr_selection at end of EXEC
+            jump_addr_selection <= jump_addr_selection_next;
         end else begin
             jump_addr_selection <= jump_addr_selection;
         end

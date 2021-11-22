@@ -15,8 +15,8 @@ module pc(
     output logic finish // goes high when trying to execute instruction address 0
 );
 
-    logic [31:0] addr_next, instruction_word_prev, tmp;
-    logic [1:0] jump_addr_selection; // control signal defined in branch_control
+    logic [31:0] addr_next, instruction_word_prev;
+    logic [1:0] jump_addr_selection; // control signal defined in branch_control.v
     
     always @(*) begin
         if(addr == 0) begin // executing exit instruction address
@@ -36,10 +36,9 @@ module pc(
     always_ff @(posedge clk) begin
         if (reset) begin
             addr <= 32'hBFC00000;
-        end else if (state) begin // update PC every EXEC
+        end else if (state) begin // update PC at end of EXEC
             addr <= addr_next;
-            instruction_word_prev <= tmp;
-            tmp <= instruction_word;
+            instruction_word_prev <= instruction_word;
         end
     end
 
