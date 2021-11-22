@@ -15,7 +15,7 @@ module pc(
     output logic finish // goes high when trying to execute instruction address 0
 );
 
-    logic [31:0] addr_next;
+    logic [31:0] addr_next, instruction_word_prev, tmp;
     logic [1:0] jump_addr_selection; // control signal defined in branch_control
     
     always @(*) begin
@@ -26,8 +26,8 @@ module pc(
             finish = 0;
             case (jump_addr_selection)
                 2'b01: addr_next = read_data_0; // absolute jump (JR,JALR);
-                2'b10: addr_next = {addr[31:28], instruction_word[25:0], 2'b0}; // page absolute jump (J,JAL);
-                2'b11: addr_next = (addr + {14'b0, instruction_word[15:0], 2'b0}); // pc relative branch (all branch instructions);
+                2'b10: addr_next = {addr[31:28], instruction_word_prev[25:0], 2'b0}; // page absolute jump (J,JAL);
+                2'b11: addr_next = (addr + {14'b0, instruction_word_prev[15:0], 2'b0}); // pc relative branch (all branch instructions);
                 default: addr_next = addr + 4;
             endcase
         end
@@ -38,6 +38,8 @@ module pc(
             addr <= 32'hBFC00000;
         end else if (state) begin // update PC every EXEC
             addr <= addr_next;
+            instruction_word_prev <= tmp;
+            tmp <= instruction_word;
         end
     end
 

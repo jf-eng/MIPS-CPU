@@ -91,10 +91,13 @@ module branch_control(
 
     // at every EXEC, update FF
     // delay needed so that PC only jumps after branch delay slot
+    // still bugged altho jump_addr_selection is correct now
+    logic [31:0] tmp;
     always_ff @(posedge clk) begin
-        if (state)
-            jump_addr_selection <= jump_addr_selection_next;
-        else begin
+        if (state) begin
+            jump_addr_selection <= tmp;
+            tmp <= jump_addr_selection_next;
+        end else begin
             jump_addr_selection <= jump_addr_selection;
         end
     end

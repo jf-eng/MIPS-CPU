@@ -36,15 +36,18 @@ module pc_tb();
         reset = 1;
         @(negedge clk);
         reset = 0;
+        instruction_word = 32'b00000000011000000000000000001011; // non branch/jump 
         @(negedge clk);
 
-        instruction_word = 32'b00000000011000000000000000001011; // non branch/jump 
-        #4
+        #1
 
         instruction_word = 0;
         N = 1;
-        #3
-        instruction_word = 32'b00000100000000000000000000000100; // BLTZ offset of 16
+        #4
+        // bugged here!! the pc isnt jumping? cos the jump_selection is not kept long enough for branch delay slot
+        instruction_word = 32'b00000100000000000000000000000010; // BLTZ offset of 8
+        #4
+        instruction_word = 32'b00000000011000000000000000001011; // non branch/jump 
         #4
         instruction_word = 0;
         #100;
