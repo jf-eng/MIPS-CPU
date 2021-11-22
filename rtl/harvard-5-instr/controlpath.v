@@ -12,11 +12,14 @@ module controlpath (
 	output logic RegWrite,
 	output logic[31:0] instr_read_addr,
     output logic[5:0] func_code,
-	output logic data_read, data_write
+	output logic data_read, data_write,
+	output logic cpu_halt
 );
 
 	logic[31:0] instruction_word;
 	logic[5:0] instruction_opcode;
+	logic halt;
+	assign cpu_halt = halt;
 
 	ir irblock(
 		.read_data(instr_read_data), //input
@@ -32,9 +35,10 @@ module controlpath (
 
 	pc pcblock(
 		.reset(reset),
-		.immediate(Branch), // PROB A BUG HERE... more logic may be needed within PC block; input
+		.immediate(Branch), // input
 		.Rd(reg_read_data_0), //register content for immediate addressing; input
 		.clk(clk), //clock; input
+		.halt(halt), // cpu halt input
 		.addr(instr_read_addr) //the output address; output
 	);
 
@@ -48,6 +52,8 @@ module controlpath (
 		.ALUOp(ALUOp), //output
 		.MemWrite(data_write), //output
 		.ALUSrc(ALUSrc), //output
-		.RegWrite(RegWrite) //output
+		.RegWrite(RegWrite), //output
+		.halt(halt) // output
 	);
+
 endmodule

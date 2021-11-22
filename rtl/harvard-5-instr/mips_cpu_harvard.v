@@ -2,8 +2,8 @@ module mips_cpu_harvard(
     /* Standard signals */
     input logic     clk,
     input logic     reset,
-    output logic    active, //not implemented yet
-    output logic [31:0] register_v0, //not implemented yet
+    output logic    active, 
+    output logic [31:0] register_v0, 
 
     /* New clock enable. See below. */
     input logic     clk_enable, //not implemented yet
@@ -25,6 +25,15 @@ module mips_cpu_harvard(
     logic[15:0] alu_immediate;
     logic[31:0] reg_read_data_0;
     logic[5:0] func_code, ALUOp;
+    logic cpu_halt;
+
+    // CPU HALTING & ACTIVE LATCHES
+    always_ff @(posedge clk) begin
+        if(reset)
+            active <= 1;
+        if(cpu_halt)
+            active <= 0;
+    end
 
     // Control Path
     controlpath controlpathblock(
@@ -45,7 +54,8 @@ module mips_cpu_harvard(
 	    .instr_read_addr(instr_address),//output   
         .func_code(func_code),//output
 	    .data_read(data_read),//output  
-        .data_write(data_write)//output  
+        .data_write(data_write),//output  
+        .cpu_halt(cpu_halt) // cpu halt output
     );
 
     // Data Path
@@ -65,7 +75,8 @@ module mips_cpu_harvard(
         .ALUOp(ALUOp),//input
         .data_address(data_address), //output
         .data_writedata(data_writedata), //output
-        .reg_read_data_0(reg_read_data_0)//output
+        .reg_read_data_0(reg_read_data_0), //output
+        .register_v0(register_v0) // regfile[2] output
     );
 
 // BFC0 0000

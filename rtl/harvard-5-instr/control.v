@@ -1,18 +1,24 @@
 module control ( 
     input logic [5:0] instruction_opcode,
     input logic [5:0] func_code,
-    output logic RegDst,
-    output logic Branch,
-    output logic MemRead,
-    output logic MemtoReg,
+
+    output logic RegDst, // choose rd as destination over rt
+    output logic Branch, // tell pc to branch
+    output logic MemRead, // reading memory
+    output logic MemtoReg, // load ram_dout to regfile
+    output logic MemWrite, // write to ram
+    output logic ALUSrc, // change alu op2 to immediate
+    output logic RegWrite, // write to register file
+
     output logic [5:0] ALUOp,
-    output logic MemWrite,
-    output logic ALUSrc,
-    output logic RegWrite
+    output logic halt
 );
 
+    assign ALUOp = instruction_opcode;
+    assign halt = (instruction_opcode == 6'b111111) ? 1 : 0;
+
+
     always_comb begin
-        ALUOp = instruction_opcode;
         if (instruction_opcode == 0) begin
             RegDst = 1;
             Branch = (func_code == 6'b001000) ? 1 : 0;
@@ -45,7 +51,7 @@ module control (
                 ALUSrc = 1;
                 RegWrite = 1;
             end
-            else if (instruction_opcode == 6'h23) begin
+            else if (instruction_opcode == 6'h23) begin // LW
                 MemRead = 1;
                 MemtoReg = 1;
                 //ALUOp = 1;
@@ -63,6 +69,10 @@ module control (
                 RegWrite = 0;
             end
         end
-        
     end
+
 endmodule
+    // OLD CODE:
+
+
+

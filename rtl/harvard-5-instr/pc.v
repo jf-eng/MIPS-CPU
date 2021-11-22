@@ -1,13 +1,14 @@
 module pc (
 	input logic immediate, // goes high when immediate address required
 	input logic [31:0] Rd, //register content for immediate addressing
-	input logic clk, reset, //clock & reset
+	input logic clk, reset, halt, //clock, reset & halt
 	output logic [31:0] addr //the output address
 );
 
 	logic [31:0] addr_next;
 
-	assign addr_next = (immediate) ? Rd : addr + 4;
+	assign addr_next = (halt) ? addr : 
+				  (immediate) ? Rd : addr + 4;
 
 	always_ff @(posedge clk) begin
 		if(reset) begin

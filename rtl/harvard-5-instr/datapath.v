@@ -5,7 +5,8 @@ module datapath(
     input logic[5:0] func_code,ALUOp,
 	input logic[15:0] alu_immediate,
 	input logic[31:0] data_readdata,
-	output logic[31:0] data_address, data_writedata, reg_read_data_0
+	output logic[31:0] data_address, data_writedata, reg_read_data_0,
+	output logic[31:0] register_v0
 );
 
 	// REGFILE INPUTS
@@ -26,7 +27,8 @@ module datapath(
 		.clk(clk), .wen(RegWrite), .reset(reset),
 		.write_data(reg_write_data), .write_addr(reg_write_addr),
 		.read_addr_0(reg_read_addr_0), .read_addr_1(reg_read_addr_1),
-		.read_data_0(reg_read_data_0), .read_data_1(reg_read_data_1)
+		.read_data_0(reg_read_data_0), .read_data_1(reg_read_data_1),
+		.register_v0(register_v0)
 	);
 
 	logic [31:0] sign_extended;

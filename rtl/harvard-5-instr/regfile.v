@@ -3,10 +3,13 @@ module regfile (
 	input logic[31:0] write_data,
 	input logic[4:0] write_addr,
 	input logic[4:0] read_addr_0, read_addr_1,
-	output logic[31:0] read_data_0, read_data_1
+	output logic[31:0] read_data_0, read_data_1,
+	output logic[31:0] register_v0
 );
 
 	reg [31:0] regs [31:0];
+
+	assign register_v0 = regs[2];
 
 	always_ff @(posedge clk) begin
 		if(reset == 1) begin
