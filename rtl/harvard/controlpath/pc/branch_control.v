@@ -83,10 +83,12 @@ module branch_control(
                 jump_addr_selection_next = (!N) ? 2'b11 : 0;
                 B_link = 0;
             end
-        default: begin // otherwise, dont jump
-            jump_addr_selection_next = 0; B_link = 0;
-        end
+            default: begin // otherwise, dont jump
+                jump_addr_selection_next = 0; B_link = 0;
+            end
         endcase
+
+        B_link = (state) ? B_link : 0; // B_link should only be high in EXEC bc its used as RegWrite
     end
 
     // at every EXEC, update FF
