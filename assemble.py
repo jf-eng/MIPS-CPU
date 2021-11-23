@@ -96,12 +96,15 @@ def parse_line(line):
 			return op(opcode) + rs + rt + offset
 		elif opcode == OPCODE["ADDIU"] or opcode == OPCODE["SLTI"] or \
 				opcode == OPCODE["SLTIU"] or opcode == OPCODE["ANDI"] or \
-				opcode == OPCODE["ORI"] or opcode == OPCODE["XORI"] or \
-				opcode == OPCODE["LUI"]:
+				opcode == OPCODE["ORI"] or opcode == OPCODE["XORI"]:
 			rt = reg(tokens[1])
 			rs = reg(tokens[2])
 			immediate = process_num(tokens[3], 16)
 			return op(opcode) + rs + rt + immediate
+		elif opcode == OPCODE["LUI"]:
+			rt = reg(tokens[1])
+			immediate = process_num(tokens[2], 16)
+			return op(opcode) + '0'*5 + rt + immediate
 
 		# LOADSTORE INSTRUCTIONS eg. LW rt, offset(base) 
 		else:
