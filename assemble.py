@@ -1,8 +1,26 @@
 import sys
 import os
 
-def int_to_bin(integer, len):
-	return bin(integer)[2:].zfill(len);
+def int_to_bin(integer, length):
+	def invert_bit(bit):
+		if bit == '0':
+			return '1'
+		elif bit == '1':
+			return '0'
+	
+	def bin_str_add1(bin_arr):
+		for i in range(0, len(bin_arr)):
+			if bin_arr[len(bin_arr) - i - 1] == '0':
+				bin_arr[len(bin_arr) - i - 1] = '1'
+				return "".join(bin_arr)
+		return '0'*len(bin_arr)
+
+	if integer >= 0:
+		return bin(integer)[2:].zfill(length)
+	else:
+		pos = bin(-integer)[2:].zfill(length)
+		neg = [invert_bit(c) for c in pos]
+		return bin_str_add1(neg)
 
 def process_num(imm, len):
 	return int_to_bin(int(imm.strip('#'), 0), len)
@@ -19,11 +37,21 @@ def func(func_code):
 def reg(token):
 	return int_to_bin(int(token.strip('$')), 5)
 
+# Branch calculator
+def branch_label(label, line_ind, jump_labels):
+	return int_to_bin(jump_labels[label] - line_ind, 16)
+
+# Page Jump calculator 0xFC00000 >> 2 = 0x3F00000
+def jump_label(label, line_ind, jump_labels):
+	return int_to_bin(jump_labels[label] + 0x3F00000, 26)
+
+
 # Assembles 1 line
-def parse_line(line):
+def parse_line(line, line_ind, jump_labels):
 	tokens = [w.strip(',') for w in line.split()]
 	print("Assembling " + line + "...")
-	opcode = OPCODE[tokens[0]];
+	opcode = OPCODE[tokens[0].upper()];
+
 
 	# ALL R-type instructions
 	if opcode == 0: 
@@ -74,25 +102,44 @@ def parse_line(line):
 			rt = "00000"
 		elif tokens[0] == "BLTZAL":
 			rt = "10000"
+
 		rs = reg(tokens[1])
-		offset = process_num(tokens[2], 16)
+
+		if(tokens[2][0] == "#"):
+			offset = process_num(tokens[2], 16)
+		else:
+			offset = branch_label(tokens[2], line_ind, jump_labels)
 		return op(opcode) + rs + rt + offset;
 
 	# ALL J-type instructions
 	elif opcode == 2 or opcode == 3: # J & JAL
-		return op(opcode) + process_num(tokens[1], 26)
+		
+		if tokens[1][0] == "#":
+			immediate = process_num(tokens[1], 26)
+		else:
+			print(tokens[1])
+			immediate = jump_label(tokens[1], line_ind, jump_labels)
+			print(immediate)
+		
+		return op(opcode) + immediate
 
 	# ALL I-type instructions
 	else:
 		if opcode == OPCODE["BEQ"] or opcode == OPCODE["BNE"]:
 			rs = reg(tokens[1])
 			rt = reg(tokens[2])
-			offset = process_num(tokens[3], 16)
+			if(tokens[3][0] == "#"):
+				offset = process_num(tokens[3], 16)
+			else:
+				offset = branch_label(tokens[3], line_ind, jump_labels)
 			return op(opcode) + rs + rt + offset
 		elif opcode == OPCODE["BLEZ"] or opcode == OPCODE["BGTZ"]:
 			rs = reg(tokens[1])
 			rt = "00000"
-			offset = process_num(tokens[2], 16)
+			if(tokens[2][0] == "#"):
+				offset = process_num(tokens[2], 16)
+			else:
+				offset = branch_label(tokens[2], line_ind, jump_labels)
 			return op(opcode) + rs + rt + offset
 		elif opcode == OPCODE["ADDIU"] or opcode == OPCODE["SLTI"] or \
 				opcode == OPCODE["SLTIU"] or opcode == OPCODE["ANDI"] or \
@@ -119,11 +166,38 @@ def parse_line(line):
 # Assembles every line in file
 def assemble(filepath):
 	f = open(filepath, 'r')
-	lines = [l.strip() for l in f.readlines()] # strips whitespace & gets lines
+	lines = [l[:l.find("//")] for l in f.readlines()] # removes comments
+	lines = [l.strip() for l in lines] # strips whitespace & gets lines
+	lines = [v for v in lines if v != ""]
+	# Do first pass on all lines
+	# section .text .config
+	
+	# print(lines)
+
+	dot_indexes = {}
+	jump_labels = {}
+
+	for n, l in enumerate(lines): 
+		# extract indexes of .config, .text, .data
+		if len(l) > 0 and l[0] == ".":
+			dot_indexes[l] = n
+		# extract indexes of label: 
+		if len(l) > 0 and l[-1] == ":":
+			lines.remove(l)
+			jump_labels[l[:-1]] = n - dot_indexes[".text"] - 1
+	
+
+	config = lines[dot_indexes[".config"]+1:dot_indexes[".text"]]
+	instr = lines[dot_indexes[".text"]+1:dot_indexes[".data"]]
+	data = lines[dot_indexes[".data"]+1:]
+
+	instr_word_count = len(instr)
+	
+	# Do second pass on instr
 	binlines = [] 
-	for line in lines:
-		binlines.append(parse_line(line) + " // " + line + "\n")
-	# print(binlines)
+	for line_num, i in enumerate(instr):
+		binlines.append(parse_line(i, line_num, jump_labels) + " // " + i + "\n")
+	
 	outpath = os.path.splitext(filepath)[0] + ".mem"
 	outF = open(outpath, 'w')
 	outF.writelines(binlines)

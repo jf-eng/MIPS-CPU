@@ -13,3 +13,8 @@ Assembler can assemble multiple filepaths and produces a `<filename>.mem` binary
 
 `./assemble <file1> [<file2> <file3> ...]`
 
+
+## Features
+
+- `.config`, `.text`, `.data` sections to ASM
+- 
