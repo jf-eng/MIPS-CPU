@@ -5,7 +5,8 @@ module ir(
     output logic[4:0] rs, rd, rt,
     output logic[4:0] shamt,
     output logic[15:0] alu_immediate,
-    output logic[5:0] func_code
+    output logic[5:0] func_code,
+    output logic [4:0] special_branch_codes
 
 );
     always @(*) begin
@@ -17,6 +18,7 @@ module ir(
         shamt = instruction_word[10:6];
         alu_immediate = instruction_word[15:0];
         func_code = instruction_word[5:0];
+        special_branch_codes = instruction_word[20:16];
     end
 
 endmodule
