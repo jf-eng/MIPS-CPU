@@ -14,6 +14,7 @@ module controlpath(
     // PC block
     input logic N,
     input logic Z,
+    input logic EQ,
     input logic[31:0] read_data_0,
     output logic B_link,
     output logic[31:0] instr_address,
@@ -75,6 +76,7 @@ module controlpath(
         .reset(reset),
         .N(N),
         .Z(Z),
+        .EQ(EQ),
         .instruction_word(instruction_word),
         .read_data_0(read_data_0),
         .B_link(B_link),
