@@ -6,7 +6,7 @@ module pc(
     input logic clk,
     input logic state,
     input logic reset,
-    input logic N, Z,
+    input logic N, Z, EQ,
     input logic [31:0] instruction_word,
     input logic [31:0] read_data_0, // register data for JR, JALR
 
@@ -45,6 +45,7 @@ module pc(
     branch_control branch_controlblock(
         .N(N),
         .Z(Z),
+        .EQ(EQ),
         .instruction_word(instruction_word),
         .state(state),
         .clk(clk),
