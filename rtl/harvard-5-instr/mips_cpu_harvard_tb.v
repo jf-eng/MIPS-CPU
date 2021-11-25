@@ -118,4 +118,3 @@ module mips_cpu_harvard_tb();
     // end
 
 endmodule
-

@@ -73,8 +73,8 @@ module control (
             end
             endcase
         end
-    end
 endmodule
+    end
   
         // else if (instruction_opcode == 6'b100011) begin // LW: opcode 0x23
         //     RegDst = 0;
