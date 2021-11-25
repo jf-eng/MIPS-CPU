@@ -70,10 +70,10 @@ module control (
                         RegDst = 1'bx; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ShiftAmt = 0; R31 = 0;
                         Add = 0; Sub = 0; Mul = 0; Div = 1; Unsigned = 1; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     6'b001001 : begin //JALR
-                        RegDst = 1; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = 1;
+                        RegDst = 1; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     6'b001000 : begin // JR
-                        RegDst = 1'bx; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 1'bx; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     6'b010001 : begin // MTHI
                         RegDst = 1'bx; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ShiftAmt = 0; R31 = 0;
@@ -126,43 +126,43 @@ module control (
             else if (instruction_opcode == 6'b000001) begin // special branches using rt
                 casex(special_branch_codes)
                     5'b00001 : begin // BGEZ(Is offset*4 done by SL or Mul?)
-                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                     Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     5'b10001 : begin // BGEZAL
-                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 1;
+                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                     Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     5'b00000 : begin // BLTZ
-                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                     Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     5'b10000 : begin // BLTZAL
-                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 1;
+                    RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                     Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 endcase
             end
             else begin
                 casex(instruction_opcode)
                     6'b000010 : begin // J
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                     
                     6'b000011 : begin // JAL
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = 1;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 
                     6'b000100 : begin // BEQ
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 
                     6'b000101 : begin // BNE
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 
                     6'b000110 : begin // BLEZ
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 
                     6'b000111 : begin // BGTZ
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = B_link; ShiftAmt = 0; R31 = B_link;
                         Add = 0; Sub = 1; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end
                 
                     6'b001001 : begin // ADDIU
