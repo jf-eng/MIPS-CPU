@@ -15,8 +15,9 @@
 */
 
 module branch_control(
-    input logic N, // high if alu_out is negative
-    input logic Z, // high if alu_out is zero
+    input logic N, // high if rs is negative
+    input logic Z, // high if rs is zero
+    input logic EQ, // high if rs == rt
     input logic[31:0] instruction_word, //taking in the entire word bc of repeated branch opcodes like JALR,JR,BGEZ,BGEZAL,BLTZ,BLTZAL
     input logic state,
     input logic clk,
@@ -41,7 +42,7 @@ module branch_control(
                 end
             end
             6'b000001: begin // special_branch_codes case
-                if (instruction_word[20:16] == 5'b00001) begin // BGEZ; assume ALU does either rs - 0 or rs + 0; branch if rs >= 0
+                if (instruction_word[20:16] == 5'b00001) begin // BGEZ; branch if rs >= 0
                     jump_addr_selection_next = (!N | Z) ? 2'b11 : 0; 
                     B_link = 0;
                 end
@@ -67,12 +68,12 @@ module branch_control(
             6'b000011: begin // JAL
                 jump_addr_selection_next = 2'b10; B_link = 1;
             end
-            6'b000100: begin // BEQ; assume alu does rs - rt; branch if rs==rt
-                jump_addr_selection_next = (Z) ? 2'b11 : 0;
+            6'b000100: begin // BEQ; branch if rs==rt
+                jump_addr_selection_next = (EQ) ? 2'b11 : 0;
                 B_link = 0;
             end
             6'b000101: begin // BNE; branch if rs!=rt
-                jump_addr_selection_next = (!Z) ? 2'b11 : 0;
+                jump_addr_selection_next = (!EQ) ? 2'b11 : 0;
                 B_link = 0;
             end
             6'b000110: begin // BLEZ; branch if rs <= 0
