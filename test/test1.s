@@ -1,5 +1,6 @@
 .config
 	ARCH h // harvard
+	ASSERT 32'h30
 
 .text
 		ADDIU $2 $0 #0x10

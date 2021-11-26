@@ -241,7 +241,10 @@ def assemble(filepath):
 
 
 	outpath = os.path.splitext(filepath)[0]
+	outname = os.path.basename(filepath)
+	outname = outname[:outname.find(".")]
 
+	# ARCHITECTURE
 	if config_table["ARCH"] == "harvard" or config_table["ARCH"] == "h":
 
 		if ".text" in lines:
@@ -255,6 +258,35 @@ def assemble(filepath):
 			ramF.writelines(datalines)
 			print("Data output written to " + outpath + ".ram")
 			ramF.close()
+
+		if "ASSERT" in config_table: # if assert is a key
+			verilogF = open(outpath + ".v", 'w')
+			verilogF.write(
+f"""
+module {outname} ();
+	
+    logic active;
+    logic[31:0] register_v0;
+
+    mips_cpu_harvard_tb #(
+        .ROM_INIT_FILE("{outname}.rom"),
+        .RAM_INIT_FILE("{outname}.ram")
+    ) TB (
+        .active(active),
+        .register_v0(register_v0)
+    );
+
+    initial begin
+        @(negedge active);
+        assert(register_v0 == {config_table["ASSERT"]}) else $fatal(1); 
+        $finish;
+    end
+
+endmodule
+"""
+)
+			print("Generated Testbench at " + outpath + ".v")
+			verilogF.close()
 
 	elif config_table["ARCH"] == "vonn" or config_table["ARCH"] == "von neumann" or \
 			config_table["ARCH"] == "v":
