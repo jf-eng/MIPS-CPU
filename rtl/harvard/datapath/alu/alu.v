@@ -1,22 +1,28 @@
 module alu(
 	input logic clk,
-	input logic[31:0] op1, op2,
+	input logic [31:0] op1, op2,
 	input logic Add, Sub, Mul, Div, Unsigned, WriteHi, WriteLo,
-	input Or, And, Xor, Sl, Sr, Arithmetic, Boolean,
-	output logic[31:0] alu_out, hi, lo,
-	output logic n, z, eq
+	input logic Or, And, Xor, Sl, Sr, Arithmetic, Boolean,
+	output logic [31:0] alu_out,
+	output logic n, z, eq,
+	output logic [31:0] hi, lo //TODO delete this
 );
+
+logic signed [31:0] op1_s, op2_s;
+
+assign op1_s = op1;
+assign op2_s = op2;
 
 logic [31:0] subtractedUnsigned, subtractedSigned;
 assign subtractedUnsigned = op1-op2;
 assign subtractedSigned = op1[30:0] - op2[30:0];
 
 always_comb begin
-	if(Add) begin //addition: add both operands
+	if(Add) begin
 		alu_out = op1 + op2;
 	end
 
-	if(Sub) begin //subtraction: subtract op2 from op1
+	if(Sub) begin
 		alu_out = op1 - op2;
 	end
 
@@ -38,7 +44,7 @@ always_comb begin
 
 	if(Sr) begin
 		if(Arithmetic) begin
-			alu_out = op1 >>> op2; //3 arrows = arithmetic
+			alu_out = op1_s >>> op2_s; //3 arrows = arithmetic
 		end else begin
 			alu_out = op1 >> op2;
 		end
@@ -49,12 +55,12 @@ end
 always @(*) begin //in always * because bit select not supported in always_comb
 	if(Boolean) begin
 		if(Unsigned || !(op1[31] && op2[31])) begin //want to subtract if we are either working with unsigned numbers or at least one signed number is positive
-			alu_out <= {
+			alu_out = {
 					31'h00000000,
 					subtractedUnsigned[31]
 				}; //put 31 0s on front of msb of op1 - op2
 		end else begin
-			alu_out <= {
+			alu_out = {
 					31'h00000000,
 					subtractedSigned[31]
 				}; //put 31 0s on front of msb of 30 lsb bits of op1 - 30 lsb bits of op2
@@ -64,12 +70,11 @@ always @(*) begin //in always * because bit select not supported in always_comb
 	
 end
 
-logic[63:0] multiplied, divided; //for the 64 bit result of multiplicaiton / division
+logic[63:0] multiplied; //for the 64 bit result of multiplicaiton / division
 logic [63:0] op1se, op2se; //sign extended op1 and op2 for 64 bit
 
-assign op1se = Unsigned || (!Unsigned && !op1[31]) ? {32'h00000000, op1} : {32'h11111111, op1}; //if unsigned, we want 0 extened; if signed and msb is 0, we want 0 extended; else, we want 1 extended
-assign op2se = Unsigned || (!Unsigned && !op2[31]) ? {32'h00000000, op2} : {32'h11111111, op2}; //if unsigned, we want 0 extened; if signed and msb is 0, we want 0 extended; else, we want 1 extended
-assign multiplied = op1se * op2se;
+
+assign multiplied = op1_s * op2_s;
 
 always_ff @(posedge clk) begin
 	if(Mul) begin //multiplication
@@ -103,9 +108,20 @@ always_ff @(posedge clk) begin
 		z <= 0;
 	end
 
-	
-
-	//TODO DIVISION LATER
+	if(Div) begin
+		if(op2 == 0) begin
+			lo <= 32'h????????;
+			hi <= 32'h????????;
+		end else begin
+			if(Unsigned) begin
+				lo <= op1 / op2;
+				hi <= op1 % op2;
+			end else begin
+				lo <= op1_s / op2_s;
+				hi <= op1_s % op2_s;
+			end
+		end
+	end
 end
 
 endmodule
