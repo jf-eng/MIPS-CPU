@@ -1,5 +1,6 @@
 .config
 	ARCH h
+	ASSERT 32'h12
 
 .text
 		ADDIU $1 $0 #0x10
