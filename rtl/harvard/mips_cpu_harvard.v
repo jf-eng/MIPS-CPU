@@ -7,7 +7,7 @@ module mips_cpu_harvard(
 
     // We ignore this input cos its not required for bus cpu anyway
     // /* New clock enable. See below. */ 
-    // input logic     clk_enable,
+    input logic     clk_enable,
 
     /* Combinatorial read access to instructions */
     output logic[31:0]  instr_address,
