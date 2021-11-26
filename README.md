@@ -23,7 +23,7 @@ Config is used to mark the start of assembler configuration.
 
 Text and data labels are used to mark the start of instructions and initial ram values.
 
-Example Program
+Example Program:
 ```
 .config
 	ARCH h
@@ -44,6 +44,3 @@ Example Program
 		#0x0ff00ff0
 ```
 
-## Features
-
-- `.config`, `.text`, `.data` sections to ASM
