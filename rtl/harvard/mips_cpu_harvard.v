@@ -63,11 +63,9 @@ module mips_cpu_harvard(
     logic finish;
 
     // Control block
-    logic MemRead;
-    logic MemWrite;
-    logic R31;
+    // logic R31;
 
-    // ACTIVE LATCH
+//     // ACTIVE LATCH
     always_ff @(posedge clk) begin
         if(reset)
             active <= 1;
@@ -92,9 +90,9 @@ module mips_cpu_harvard(
         .instr_address(instr_address),
         .finish(finish),
         .RegDst(RegDst),
-        .MemRead(MemRead),
+        .MemRead(data_read),
         .MemtoReg(MemtoReg),
-        .MemWrite(MemWrite),
+        .MemWrite(data_write),
         .ALUSrc(ALUSrc),
         .RegWrite(RegWrite),
         .Add(Add),
@@ -158,7 +156,7 @@ module mips_cpu_harvard(
         .N(N),
         .Z(Z),
         .EQ(EQ),
-        .alu_out(alu_out)
+        .alu_out(data_address)
     );
 
 
