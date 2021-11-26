@@ -34,7 +34,3 @@ for file in $ASM_FILES; do
 	cd ..
 
 done
-
-
-# remove stuff
-# rm -rf addu_0.rom addu_0.ram addu_0 *.vcd
