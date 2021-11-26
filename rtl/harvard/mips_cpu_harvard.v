@@ -63,7 +63,7 @@ module mips_cpu_harvard(
     logic finish;
 
     // Control block
-    // logic R31;
+    logic R31;
 
 //     // ACTIVE LATCH
     always_ff @(posedge clk) begin

@@ -1,11 +1,11 @@
-module addu_0 ();
+module addu_1 ();
 	
     logic active;
     logic[31:0] register_v0;
 
     mips_cpu_harvard_tb #(
-        .ROM_INIT_FILE("addu_0.rom"), // change these parameters
-        .RAM_INIT_FILE("addu_0.ram") // change these parameters
+        .ROM_INIT_FILE("addu_1.rom"), // change these parameters
+        .RAM_INIT_FILE("addu_1.ram") // change these parameters
     ) TB (
         .active(active),
         .register_v0(register_v0)

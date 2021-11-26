@@ -1,9 +1,10 @@
-module mips_cpu_harvard_tb ();
+module mips_cpu_harvard_tb (
+	output logic active,
+	output logic[31:0] register_v0
+);
 	
     logic clk;
     logic reset;
-    logic active;
-    logic [31:0] register_v0;
 
     /* New clock enable. See below. */
     logic clk_enable; /* Combinatorial read access to instructions */
@@ -38,22 +39,22 @@ module mips_cpu_harvard_tb ();
 
     // CLK
     initial begin
-        $dumpfile("mips_cpu_harvard_tb.vcd");
-        $dumpvars(0, mips_cpu_harvard_tb);
+        // $dumpfile("mips_cpu_harvard_tb.vcd");
+        // $dumpvars(0, mips_cpu_harvard_tb);
         clk = 0;
-        repeat (200) begin
+        repeat (600) begin
             #2;
             clk = !clk;
         end
-        $fatal(2, "Simulation ended in 100 clock cycles");
+        $fatal(2, "Simulation ended in 300 clock cycles");
     end
 
     // RAM & ROM
     reg [31:0] rom [0:255];
     reg [31:0] ram [0:255];
 
-    parameter ROM_INIT_FILE = "addu_0.rom";
-    parameter RAM_INIT_FILE = "addu_0.ram";
+    parameter ROM_INIT_FILE = ".rom";
+    parameter RAM_INIT_FILE = ".ram";
 
     // RAM ROM initialisation
     initial begin
@@ -69,7 +70,7 @@ module mips_cpu_harvard_tb ();
 
         if (RAM_INIT_FILE != "") begin
             $display("RAM : INIT : Loading RAM contents from %s", RAM_INIT_FILE);
-            $readmemh(RAM_INIT_FILE, ram);
+            $readmemb(RAM_INIT_FILE, ram);
         end
     end
 
@@ -79,7 +80,7 @@ module mips_cpu_harvard_tb ();
     assign ram_wordaddr = data_address[7:0] >> 2;
 
     assign instr_readdata = (instr_address[31:8] == 24'hBFC000) ? rom[rom_wordaddr] :
-            (instr_address == 0) ? 0 : 32'hxxxxxxxx;
+            (data_address == 0) ? 0 : 32'hxxxxxxxx;
     assign data_readdata = (data_read && data_address[31:8] == 24'h000000) ? ram[ram_wordaddr] : 32'hxxxxxxxx;
 
     // RAM WRITE
@@ -91,21 +92,17 @@ module mips_cpu_harvard_tb ();
 
     // TESTING
     initial begin
+        // $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
+        //         $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
+
         reset = 0;
-        $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
-                $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
         @(negedge clk);
         reset = 1;
         @(negedge clk);
         reset = 0;
 
-
         @(negedge active); // wait until cpu ends
-        #1;
-        assert(register_v0 == 18);
-        // #100;
 
-        $finish;
     end
 
 endmodule
