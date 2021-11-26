@@ -4,11 +4,12 @@ module alu(
 	input logic Add, Sub, Mul, Div, Unsigned, WriteHi, WriteLo, ReadHi, ReadLo,
 	input logic Or, And, Xor, Sl, Sr, Arithmetic, Boolean,
 	output logic [31:0] alu_out,
-	output logic n, z, eq,
-	output logic [31:0] hi, lo //TODO delete this
+	output logic n, z, eq
 );
 
 logic signed [31:0] op1_s, op2_s;
+logic [31:0] lo, hi;
+
 
 assign op1_s = op1;
 assign op2_s = op2;

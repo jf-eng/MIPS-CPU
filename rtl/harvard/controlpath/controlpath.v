@@ -40,8 +40,11 @@ module controlpath(
     output logic Arithmetic,
     output logic Boolean,
     output logic R31,
-    output logic ShiftAmt
-    
+    output logic ShiftAmt,
+    output logic ReadHi,
+    output logic ReadLo,
+    output logic WriteHi,
+    output logic WriteLo
 );
     // State machine
     logic state;
@@ -110,7 +113,11 @@ module controlpath(
         .Arithmetic(Arithmetic),
         .Boolean(Boolean),
         .R31(R31),
-        .ShiftAmt(ShiftAmt)
+        .ShiftAmt(ShiftAmt),
+        .WriteLo(WriteLo),
+        .WriteHi(WriteHi),
+        .ReadLo(ReadLo),
+        .ReadHi(ReadHi)
     );
 
 endmodule

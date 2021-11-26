@@ -1,10 +1,10 @@
 module datapath(
     input logic clk,
 
-    // Regfile
+
     input logic reset,
     input logic RegWrite,
-    input logic instr_address,
+    input logic [31:0] instr_address,
     input logic MemtoReg,
     input logic[31:0] data_readdata,
     input logic RegDst,
@@ -34,6 +34,8 @@ module datapath(
     input logic SR,
     input logic Arithmetic,
     input logic Boolean,
+    input logic ReadHi,
+    input logic ReadLo,
     output logic N,
     output logic Z,
     output logic EQ,
@@ -98,6 +100,8 @@ module datapath(
         .alu_out(alu_out),
         .n(N),
         .z(Z),
-        .eq(EQ)
+        .eq(EQ),
+        .ReadHi(ReadHi),
+        .ReadLo(ReadLo)
     );
 endmodule
