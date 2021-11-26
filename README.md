@@ -17,13 +17,18 @@ Assembler can assemble multiple filepaths and produces a `<filename>.mem` binary
 
 ## Syntax & Programming
 
-A program must have `.config`, `.text`, and `.data` section labels.
+**REQUIRED:**
+1. A program must have `.config`, `.text`, and `.data` section labels.
+2. A program must declare which architecture it wants the assembler to build to under the config section.
+- `ARCH h` to build to harvard architecture - generates .rom and .ram files
+- `ARCH v` to build to von neumann architecture - generates .ram file
 
+**Info:**
 Config is used to mark the start of assembler configuration.
 
 Text and data labels are used to mark the start of instructions and initial ram values.
 
-Example Program:
+**Example Program:**
 ```
 .config
 	ARCH h // meaning harvard, v for von neumann
@@ -32,15 +37,18 @@ Example Program:
 		ADDIU $2 $0 #0x10
 		ADDIU $3 $0 #1
 	loop:
-		ADDU $0 $0 $0
-		BGTZ $2 loop
+		ADDU $0 $0 $0 // this line is where "loop" points to
+		BGTZ $2 loop // can reference labels for branch & jump instructions
 		SUBU $2 $2 $3
 	end:
 		JR $0
 
 .data
-		#1
+		#1 // data can only be integers as of now
 		#0x1234
-		#0x0ff00ff0
+		#0b10101
 ```
 
+## Need to Implement
+- Endian change option
+- Error detection
