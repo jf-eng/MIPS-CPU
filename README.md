@@ -24,6 +24,7 @@ Assembler can assemble multiple filepaths and produces a `<filename>.mem` binary
 - `ARCH v` to build to von neumann architecture - generates .ram file
 
 **Info:**
+
 Config is used to mark the start of assembler configuration.
 
 Text and data labels are used to mark the start of instructions and initial ram values.
