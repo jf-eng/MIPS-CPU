@@ -47,7 +47,7 @@ def jump_label(label, line_ind, jump_labels):
 
 
 # Assembles 1 line
-def parse_line(line, line_ind, jump_labels):
+def parse_line(line, line_ind, jump_labels, data_table):
 	tokens = [w.strip(',') for w in line.split()]
 	print("Assembling " + line + "...")
 	opcode = OPCODE[tokens[0].upper()];
@@ -117,9 +117,7 @@ def parse_line(line, line_ind, jump_labels):
 		if tokens[1][0] == "#":
 			immediate = process_num(tokens[1], 26)
 		else:
-			print(tokens[1])
 			immediate = jump_label(tokens[1], line_ind, jump_labels)
-			print(immediate)
 		
 		return op(opcode) + immediate
 
@@ -153,17 +151,23 @@ def parse_line(line, line_ind, jump_labels):
 			immediate = process_num(tokens[2], 16)
 			return op(opcode) + '0'*5 + rt + immediate
 
-		# LOADSTORE INSTRUCTIONS eg. LW rt, offset(base) 
+		# LOADSTORE INSTRUCTIONS eg. LW rt, offset(base) or
+		#                            LW rt, <label>
 		else:
 			rt = reg(tokens[1])
-			l = tokens[2].find('(')
-			r = tokens[2].find(')')
-			base = reg(tokens[2][l+1:r])
-			offset = process_num(tokens[2][:l], 16)
-			return op(opcode) + base + rt + offset
+
+			if tokens[2].find('(') != -1:
+				l = tokens[2].find('(')
+				r = tokens[2].find(')')
+				base = reg(tokens[2][l+1:r])
+				offset = process_num(tokens[2][:l], 16)
+				return op(opcode) + base + rt + offset
+			else:
+				return op(opcode) + '0'*5 + rt + int_to_bin(data_table[tokens[2]][1], 16)
 
 
-# Assembles every line in file
+
+# Assembles every file
 def assemble(filepath):
 	f = open(filepath, 'r')
 	lines = [l[:l.find("//")] for l in f.readlines()] # removes comments
@@ -172,7 +176,9 @@ def assemble(filepath):
 	# Do first pass on all lines
 	# section .text .config
 	
-	# print(lines)
+	if not (".config" in lines and ".text" in lines and ".data" in lines):
+		print("Please include .config .text & .data labels in your code.")
+		exit(1)
 
 	dot_indexes = {}
 	jump_labels = {}
@@ -190,21 +196,74 @@ def assemble(filepath):
 	config = lines[dot_indexes[".config"]+1:dot_indexes[".text"]]
 	instr = lines[dot_indexes[".text"]+1:dot_indexes[".data"]]
 	data = lines[dot_indexes[".data"]+1:]
-
+	# print(data)
 	instr_word_count = len(instr)
+
+	config_table = {}
+	for line in config:
+		tokened = line.split()
+		config_table[tokened[0]] = tokened[1]
+
+	data_table = {}
+	for data_ind, line in enumerate(data):
+		tokened = line.split()
+		if len(tokened) > 1:
+			if config_table["ARCH"] == "harvard" or config_table["ARCH"] == "h":
+				data_table[tokened[0]] = (tokened[1], data_ind)
+			elif config_table["ARCH"] == "vonn" or config_table["ARCH"] == "von neumann" or \
+					config_table["ARCH"] == "v":
+				data_table[tokened[0]] = (tokened[1], instr_word_count + data_ind)
+	
 	
 	# Do second pass on instr
 	binlines = [] 
 	for line_num, i in enumerate(instr):
-		binlines.append(parse_line(i, line_num, jump_labels) + " // " + i + "\n")
+		binlines.append(parse_line(i, line_num, jump_labels, data_table) + " // " + i + "\n")
 	
-	outpath = os.path.splitext(filepath)[0] + ".mem"
-	outF = open(outpath, 'w')
-	outF.writelines(binlines)
-	print("Output written to " + outpath)
+	# Do second pass on data
+	datalines = []
+	for d in data:
+		t = d.split()
+		if len(t) == 1:
+			datalines.append(process_num(d, 32)+ " // " + d + "\n")
+		else:
+			datalines.append(process_num(t[1], 32)+ " // " + d + "\n")
+
+
+	outpath = os.path.splitext(filepath)[0]
+
+	if config_table["ARCH"] == "harvard" or config_table["ARCH"] == "h":
+
+		if ".text" in lines:
+			romF = open(outpath + ".rom", 'w')
+			romF.writelines(binlines)
+			print("Instruction output written to " + outpath + ".rom")
+			romF.close()
+
+		if ".data" in lines:
+			ramF = open(outpath + ".ram", 'w')
+			ramF.writelines(datalines)
+			print("Data output written to " + outpath + ".ram")
+			ramF.close()
+
+	elif config_table["ARCH"] == "vonn" or config_table["ARCH"] == "von neumann" or \
+			config_table["ARCH"] == "v":
+
+		outF = open(outpath + ".ram", 'w')
+
+		if ".text" in lines:
+			outF.writelines(binlines)
+			print("Instruction output written to " + outpath + ".ram")
+
+		if ".data" in lines:
+			outF.writelines(datalines)
+			print("Data output appended to " + outpath + ".ram")
+		
+		outF.close()
+
 
 	f.close()
-	outF.close()
+	
 
 
 FUNCCODE = {

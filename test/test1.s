@@ -1,5 +1,5 @@
 .config
-		ARCH harvard
+	ARCH h
 
 .text
 		ADDIU $2 $0 #0x10
@@ -10,7 +10,8 @@
 		SUBU $2 $2 $3
 	end:
 		JR $0
-		J loop // this doesnt actually make sense
 
 .data
-	
+		#1
+		#0x1234
+		#0x0ff00ff0
