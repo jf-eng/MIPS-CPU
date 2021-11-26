@@ -9,11 +9,19 @@ def int_to_bin(integer, length):
 			return '0'
 	
 	def bin_str_add1(bin_arr):
+		carry = True
 		for i in range(0, len(bin_arr)):
-			if bin_arr[len(bin_arr) - i - 1] == '0':
+			if not carry:
+				break
+			c = bin_arr[len(bin_arr) - i - 1]
+			
+			if c == '0':
 				bin_arr[len(bin_arr) - i - 1] = '1'
-				return "".join(bin_arr)
-		return '0'*len(bin_arr)
+				break
+			elif c == '1':
+				bin_arr[len(bin_arr) - i - 1] = '0'
+
+		return "".join(bin_arr)
 
 	if integer >= 0:
 		return bin(integer)[2:].zfill(length)
@@ -39,7 +47,7 @@ def reg(token):
 
 # Branch calculator
 def branch_label(label, line_ind, jump_labels):
-	return int_to_bin(jump_labels[label] - line_ind, 16)
+	return int_to_bin(jump_labels[label] - line_ind - 1, 16)
 
 # Page Jump calculator 0xFC00000 >> 2 = 0x3F00000
 def jump_label(label, line_ind, jump_labels):
@@ -94,6 +102,7 @@ def parse_line(line, line_ind, jump_labels, data_table):
 
 	# Special Branches
 	elif opcode == 1: # BGEZ & BGEZAL & BLTZ & BLTZAL
+		offset = '0'*16
 		if tokens[0] == "BGEZ":
 			rt = "00001"
 		elif tokens[0] == "BGEZAL":
@@ -113,7 +122,7 @@ def parse_line(line, line_ind, jump_labels, data_table):
 
 	# ALL J-type instructions
 	elif opcode == 2 or opcode == 3: # J & JAL
-		
+		immediate = '0'*26
 		if tokens[1][0] == "#":
 			immediate = process_num(tokens[1], 26)
 		else:
@@ -123,6 +132,7 @@ def parse_line(line, line_ind, jump_labels, data_table):
 
 	# ALL I-type instructions
 	else:
+		offset = '0'*16
 		if opcode == OPCODE["BEQ"] or opcode == OPCODE["BNE"]:
 			rs = reg(tokens[1])
 			rt = reg(tokens[2])
