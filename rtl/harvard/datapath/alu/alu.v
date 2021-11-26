@@ -44,7 +44,7 @@ always_comb begin
 
 	if(Sr) begin
 		if(Arithmetic) begin
-			alu_out = op1_s >>> op2_s; //3 arrows = arithmetic
+			alu_out = op1_s >>> op2; //3 arrows = arithmetic
 		end else begin
 			alu_out = op1 >> op2;
 		end
