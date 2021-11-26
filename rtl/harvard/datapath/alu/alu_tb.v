@@ -2,7 +2,7 @@ module alu_tb();
 
 logic clk;
 logic [31:0] op1, op2;
-logic Add, Sub, Mul, Div, Unsigned, WriteHi, WriteLo;
+logic Add, Sub, Mul, Div, Unsigned, WriteHi, WriteLo, ReadHi, ReadLo;
 logic Or, And, Xor, Sl, Sr, Arithmetic, Boolean;
 logic [31:0] alu_out;
 logic n, z, eq;
@@ -28,6 +28,8 @@ alu dut(
   .Unsigned(Unsigned),
   .WriteHi(WriteHi),
   .WriteLo(WriteLo),
+  .ReadHi(ReadHi),
+  .ReadLo(ReadLo),
   .Or(Or),
   .And(And),
   .Xor(Xor),
@@ -222,32 +224,45 @@ initial begin
 
   //MULTIPLY UNSIGNED
   @(negedge clk);
-  op1 = 28562;
-  op2 = 292;
+  op1 = 2597596;
+  op2 = 25952972;
   Unsigned = 1;
+  temp = op1 * op2;
 
   @(posedge clk);
   #1;
-  assert(
-    {hi, lo} == temp
-  ) 
+  assert({hi, lo} == temp) 
   $display(
-    "%d * %d = %d", op1, op2, (
-      (hi << 32) + lo
-    )
+    "%h * %h = %h", op1, op2, {hi,lo}
   ); 
 
-  else $error(
-    "expected: %d, received: %d",
-    $signed(temp),
-    $signed({hi, lo})
-  );
+  else $error("expected: %d, received: %d", temp, {hi, lo});
+
+  //READ LO
+  @(negedge clk);
+  Unsigned = 0;
+  Mul = 0;
+  ReadHi = 0;
+  ReadLo = 1;
+
+  @(posedge clk);
+  #1;
+  assert(alu_out == lo) $display("%h = %h", alu_out, lo); else $error("expected: %d, received: %d", lo, alu_out);
+
+  //READ HI
+  @(negedge clk);
+  ReadLo = 0;
+  ReadHi = 1;
+
+  @(posedge clk);
+  #1;
+  assert(alu_out == hi) $display("%h = %h", alu_out, hi); else $error("expected: %d, received: %d", alu_out, hi);
+
   //OR
   @(negedge clk);
   op1 = 32'b10011100001111100000011111110000;
   op2 = 32'b10101010101010101010101010101010;
-  Unsigned = 0;
-  Mul = 0;
+  ReadHi = 0;
   Or = 1;
 
   @(posedge clk);
