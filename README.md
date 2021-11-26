@@ -26,7 +26,7 @@ Text and data labels are used to mark the start of instructions and initial ram 
 Example Program:
 ```
 .config
-	ARCH h
+	ARCH h // meaning harvard, v for von neumann
 
 .text
 		ADDIU $2 $0 #0x10
