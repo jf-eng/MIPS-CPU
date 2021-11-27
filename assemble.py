@@ -69,6 +69,9 @@ def parse_line(line, line_ind, jump_labels, data_table):
 			# eg. JR $2 or MTHI $3
 			rs = reg(tokens[1])
 			return op(opcode) + rs + '0'*15 + func(func_code)
+		elif func_code == FUNCCODE["MFHI"] or func_code == FUNCCODE["MFLO"]:
+			rd = reg(tokens[1])
+			return op(opcode) + '0'*10 + rd + '0'*5 + func_code
 		elif func_code == FUNCCODE["DIV"] or func_code == FUNCCODE["DIVU"] \
 				or func_code == FUNCCODE["MULT"] or func_code == FUNCCODE["MULTU"]:
 			rs = reg(tokens[1])
@@ -317,6 +320,8 @@ FUNCCODE = {
 	"JR"    : 0b001000,
 	"MTHI"  : 0b010001,
 	"MTLO"  : 0b010011,
+	"MFHI"  : 0b010000,
+	"MFLO"  : 0b010010,
 	"MULT"  : 0b011000,
 	"MULTU" : 0b011001,
 	"OR"    : 0b100101,
@@ -381,6 +386,9 @@ OPCODE = {
 	"SB"    : 0b101000,
 	"SH"    : 0b101001,
 	"SW"    : 0b101011,
+	"NOP"   : 0b000000,
+	"MFHI"  : 0b000000,
+	"MFLO"  : 0b000000,
 }
 
 
