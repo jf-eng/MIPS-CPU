@@ -1,5 +1,6 @@
 .config
 	ARCH h
+	ASSERT 24
 
 .text
 	ADDIU $2 $0 #24
