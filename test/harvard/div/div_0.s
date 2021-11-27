@@ -1,6 +1,6 @@
 .config
 	ARCH h
-	ASSERT 0x5
+	ASSERT 5
 
 .text
 	ADDIU $1 $0 #20

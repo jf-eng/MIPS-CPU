@@ -6,7 +6,7 @@ NC='\033[0m'
 ASM_FILES=$(ls ./$INSTR/*.s)
 
 
-# # Options
+# # Options not bothered to implement
 # while getopts "vkf:" options; do
 
 # 	case "${options}" in
@@ -30,6 +30,7 @@ ASM_FILES=$(ls ./$INSTR/*.s)
 # 	exit 2
 # fi
 
+
 for file in $ASM_FILES; do
 
 	# Assemble
@@ -41,9 +42,9 @@ for file in $ASM_FILES; do
 		rm assem_err.log
 		exit 2
 	fi
+	rm assem_err.log
 
 	# Strip name
-
 	STRIPPED=$(basename $file .s)
 
 	# Compile entire CPU w/ testbench & instruction to test
@@ -55,12 +56,12 @@ for file in $ASM_FILES; do
 		rm comp_err.log
 		exit 2
 	fi
+	rm comp_err.log
 
 	# Run (Cannot run from here, must run in the folder itself for some reason)
 	cd $INSTR
 
-	./$STRIPPED
-	#  &>/dev/null
+	./$STRIPPED &> /dev/null
 
 	# Check Pass/Fail
 	if [[ $? -ne 0 ]]; then
@@ -70,7 +71,7 @@ for file in $ASM_FILES; do
 	fi
 
 	# remove the files
-	# rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v
+	rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v
 
 	cd ..
 
