@@ -71,7 +71,7 @@ def parse_line(line, line_ind, jump_labels, data_table):
 			return op(opcode) + rs + '0'*15 + func(func_code)
 		elif func_code == FUNCCODE["MFHI"] or func_code == FUNCCODE["MFLO"]:
 			rd = reg(tokens[1])
-			return op(opcode) + '0'*10 + rd + '0'*5 + func_code
+			return op(opcode) + '0'*10 + rd + '0'*5 + func(func_code)
 		elif func_code == FUNCCODE["DIV"] or func_code == FUNCCODE["DIVU"] \
 				or func_code == FUNCCODE["MULT"] or func_code == FUNCCODE["MULTU"]:
 			rs = reg(tokens[1])
