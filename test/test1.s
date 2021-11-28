@@ -8,5 +8,6 @@
 	DIV $1 $2
 	MFLO $2
 	JR $0
+	NOP
 
 .data

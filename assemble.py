@@ -60,6 +60,9 @@ def parse_line(line, line_ind, jump_labels, data_table):
 	print("Assembling " + line + "...")
 	opcode = OPCODE[tokens[0].upper()];
 
+	# NOP
+	if tokens[0].upper() == "NOP":
+		return '0'*32
 
 	# ALL R-type instructions
 	if opcode == 0: 
@@ -310,7 +313,6 @@ endmodule
 	f.close()
 	
 
-
 FUNCCODE = {
 	"ADDU"  : 0b100001,
 	"AND"   : 0b100100,
@@ -338,6 +340,7 @@ FUNCCODE = {
 }
 
 OPCODE = {
+	"NOP"   : 0b000000,
 	"ADDU"  : 0b000000,
 	"AND"   : 0b000000,
 	"DIV"   : 0b000000,
@@ -395,3 +398,4 @@ OPCODE = {
 # Assemble every file
 for filepath in sys.argv[1:]:
 	assemble(filepath)
+
