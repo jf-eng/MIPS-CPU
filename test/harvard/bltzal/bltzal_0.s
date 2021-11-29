@@ -2,7 +2,7 @@
 
 .config
   ARCH h
-  ASSERT 69
+  ASSERT 70
 
 .text
   ADDIU $1 $0 #2
@@ -10,7 +10,9 @@
   SUBU $1 $1 $3
   BLTZAL $1 jump
   ADDIU $2 $2 #1
+  ADDIU $2 $2 #1
   JR $0
+  NOP
   jump:
     ADDIU $2 $0 #69
   JR $31

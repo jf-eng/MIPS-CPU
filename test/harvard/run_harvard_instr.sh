@@ -72,7 +72,7 @@ for file in $ASM_FILES; do
 	fi
 
 	# remove the files
-	rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v
+	# rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v
 
 	cd ..
 

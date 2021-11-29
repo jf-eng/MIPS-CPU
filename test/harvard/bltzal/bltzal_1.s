@@ -9,8 +9,9 @@
   ADDIU $3 $0 #4
   ADDU $1 $1 $3
   BLTZAL $2 jump
-  NOP
+  ADDIU $1 $1 #0
   JR $0
+  NOP
   jump:
     ADDIU $2 $0 #69
   JR $31

@@ -48,7 +48,12 @@ module datapath(
     always_comb begin
         if(B_link) begin
             write_data = instr_address + 8; // PC + 8
-            write_addr = 32'd31; // $31
+            if(RegDst) begin // for JALR
+                write_addr = rd;
+            end
+            else begin
+                write_addr = 32'd31; // $31
+            end
         end else begin
             write_data = (MemtoReg) ? data_readdata : alu_out;
             write_addr = (RegDst) ? rd : rt;
