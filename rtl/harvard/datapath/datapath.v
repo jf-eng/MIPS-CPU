@@ -55,14 +55,22 @@ module datapath(
         end
     end
 
+    logic [4:0] read_addr_0, read_addr_1;
+    logic SH;
+
+    assign SH = (SL | SR) & RegDst;
+    assign read_addr_0 = (SH) ? rt : rs;
+    assign read_addr_1 = (SH) ? rs : rt;
+
+
     regfile regfile_block(
         .clk(clk),
         .wen(RegWrite),
         .reset(reset),
         .write_data(write_data),
         .write_addr(write_addr),
-        .read_addr_0(rs),
-        .read_addr_1(rt),
+        .read_addr_0(read_addr_0),
+        .read_addr_1(read_addr_1),
         .read_data_0(read_data_0),
         .read_data_1(read_data_1),
         .register_v0(register_v0)
