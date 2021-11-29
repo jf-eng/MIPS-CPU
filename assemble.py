@@ -172,14 +172,14 @@ def parse_line(line, line_ind, jump_labels, data_table):
 		else:
 			rt = reg(tokens[1])
 
-			if tokens[2].find('(') != -1:
+			if tokens[2].find('(') != -1: # if there is offset
 				l = tokens[2].find('(')
 				r = tokens[2].find(')')
 				base = reg(tokens[2][l+1:r])
 				offset = process_num(tokens[2][:l], 16)
 				return op(opcode) + base + rt + offset
 			else:
-				return op(opcode) + '0'*5 + rt + int_to_bin(data_table[tokens[2]][1], 16)
+				return op(opcode) + '0'*5 + rt + int_to_bin(data_table[tokens[2]][1], 14) + "00"
 
 
 

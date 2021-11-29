@@ -2,18 +2,15 @@
 
 .config
 	ARCH h
-	ASSERT 0
+	ASSERT 60
 
 .text
-		ADDIU $1 $0 #2
-		ADDIU $3 $0 #4
-		ADDU $1 $1 $3
-		BLTZAL $2 jump
-		NOP
-		JR $0
-	jump:
-		ADDIU $2 $0 #69
-		JR $31
-		NOP
+	LW $1 a
+	LW $2 4($0)
+	SW $2 8($0)
+	SW $2 c
 
 .data
+	a #50
+	b #60
+	c #0
