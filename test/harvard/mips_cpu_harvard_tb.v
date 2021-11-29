@@ -93,7 +93,11 @@ module mips_cpu_harvard_tb (
     // TESTING
     initial begin
         $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
+<<<<<<< HEAD
         $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
+=======
+                $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
+>>>>>>> tb_derek
 
         reset = 0;
         @(negedge clk);
