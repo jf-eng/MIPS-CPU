@@ -30,6 +30,7 @@ module control_tb();
     logic [5:0] counter;
     logic ReadLo;
     logic ReadHi;
+    logic LUI;
 
     
     control dut(
@@ -62,8 +63,8 @@ module control_tb();
     .WriteLo(WriteLo),
     .WriteHi(WriteHi),
     .ReadLo(ReadLo),
-    .ReadHi(ReadHi)
-    
+    .ReadHi(ReadHi),
+    .LUI(LUI)
     );
 
     initial begin
@@ -79,130 +80,130 @@ module control_tb();
         state = 1;
         func_code = 6'b100001; // ADDIU
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b100100; // AND
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 1 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 1 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b011010; // DIV
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 1 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 1 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b011011; // DIVU
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 1 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 1 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b001001; // JALR
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b001000; // JR
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b010001; // MTHI
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 1 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 1 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b010011; // MTLO
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 1 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 );
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 1 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b011000; //MULT
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && /*MemtoReg == 1'bx &&*/ MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 1 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && /*MemtoReg == 1'bx &&*/ MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 1 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b011001; // MULTU
         #1;
-        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && /*MemtoReg == 1'bx &&*/ MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 1 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(/*RegDst == 1'bx &&*/ MemRead == 0 && /*MemtoReg == 1'bx &&*/ MemWrite == 0 && ALUSrc == 0 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 1 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b100101; // OR
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 1 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 1 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000000; // SLL
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000100; // SLLV
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b101010; //SLT
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b101011; //SLTU
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000011; //SRA
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 1 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 1 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000111; //SRAV
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 1 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 1 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000010; //SRL
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 1 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b000110; //SRLV
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 1 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b100011; //SUBU
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b100110; //XOR
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 1 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 1 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         func_code = 6'b010000; // MFHI
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 1 && ReadLo == 0);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 1 && ReadLo == 0 && LUI == 0);
         func_code = 6'b010010; // MFLO
         #1;
-        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 1);
+        assert(RegDst == 1 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 1 && LUI == 0);
         instruction_opcode = 6'b000001;
         special_branch_codes = 5'b00001; // BGEZ
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         special_branch_codes = 5'b10001; // BGEZAL
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         special_branch_codes = 5'b00000; // BLTZ
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         special_branch_codes = 5'b10000; // BLTZAL
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadHi == 0 && ReadLo == 0 && LUI == 0);
         instruction_opcode = 6'b000010; // J
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b000011; // JAL
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 0 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b000100; // BEQ
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b000101; // BNE
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b000110; // BLEZ
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b000111; // BGTZ
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == B_link && ShiftAmt == 0 && R31 == B_link && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001001; // ADDIU
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001010; // SLTI
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001011; // SLTIU
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 1 && Mul == 0 && Div == 0 && Unsigned == 1 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 1 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001100; // ANDI
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 1 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 1 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001101; // ORI
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 1 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 1 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001110; // XORI
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 1 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 1 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b001111; // LUI
         #1;
-        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 0 && MemtoReg == 0 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 0 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 1 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 1);
         instruction_opcode = 6'b100011; // LW
         #1;
-        assert(RegDst == 0 && MemRead == 1 && MemtoReg == 1 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(RegDst == 0 && MemRead == 1 && MemtoReg == 1 && MemWrite == 0 && ALUSrc == 1 && RegWrite == 1 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
         instruction_opcode = 6'b101011; // SW
         #1;
-        assert(/*RegDst == 0 &&*/ MemRead == 0 /*&& MemtoReg == 0*/ && MemWrite == 1 && ALUSrc == 1 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0);
+        assert(/*RegDst == 0 &&*/ MemRead == 0 /*&& MemtoReg == 0*/ && MemWrite == 1 && ALUSrc == 1 && RegWrite == 0 && ShiftAmt == 0 && R31 == 0 && Add == 1 && Sub == 0 && Mul == 0 && Div == 0 && Unsigned == 0 && Or == 0 && And == 0 && Xor == 0 && SL == 0 && SR == 0 && Arithmetic == 0 && Boolean == 0 && WriteLo == 0 && WriteHi == 0 && ReadLo == 0 && ReadHi == 0 && LUI == 0);
     end
 endmodule
