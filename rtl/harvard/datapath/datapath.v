@@ -48,11 +48,10 @@ module datapath(
     always_comb begin
         if(B_link) begin
             write_data = instr_address + 8; // PC + 8
-            if(RegDst) begin // for JALR
+            if(RegDst) begin // high for JALR (all other B_link instructions has RegDst = 0)
                 write_addr = rd;
-            end
-            else begin
-                write_addr = 32'd31; // $31
+            end else begin
+                write_addr = 32'd31; // $31 for all other B_link instructions
             end
         end else begin
             write_data = (MemtoReg) ? data_readdata : alu_out;
@@ -60,14 +59,22 @@ module datapath(
         end
     end
 
+    logic [4:0] read_addr_0, read_addr_1;
+    logic SH;
+
+    assign SH = (SL | SR) & RegDst; //control signal to differentiate between LUI and shift instruction where rs and rt are swapped
+    assign read_addr_0 = (SH) ? rt : rs;
+    assign read_addr_1 = (SH) ? rs : rt;
+
+
     regfile regfile_block(
         .clk(clk),
         .wen(RegWrite),
         .reset(reset),
         .write_data(write_data),
         .write_addr(write_addr),
-        .read_addr_0(rs),
-        .read_addr_1(rt),
+        .read_addr_0(read_addr_0),
+        .read_addr_1(read_addr_1),
         .read_data_0(read_data_0),
         .read_data_1(read_data_1),
         .register_v0(register_v0)
