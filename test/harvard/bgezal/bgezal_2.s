@@ -9,7 +9,7 @@
         SUBU $2 $2 $1
         ADDIU $2 $0 #5
         JR $0
-        ADDU $0 $0 $0
+        NOP
 
     jump:
         SUBU $2 $2 $1

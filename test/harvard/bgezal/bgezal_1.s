@@ -1,15 +1,17 @@
 .config
 	ARCH h
-	ASSERT 32'hFFFFFFFF
+	ASSERT 32'h3
 
 .text
         ADDIU $1 $0 #4
         ADDIU $2 $0 #3
-        BGEZAL $2 jump
         SUBU $2 $2 $1
+        BGEZAL $2 jump
+        ADDIU $2 $0 #5 
+        ADDIU $2 $0 #5
+        NOP
         JR $0
         jump:
-        ADDU $2 $2 $1
-        end:
+        ADDIU $2 $0 #3
 		JR $0
 .data
