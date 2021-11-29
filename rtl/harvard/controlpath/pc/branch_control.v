@@ -80,7 +80,7 @@ module branch_control(
                 jump_addr_selection_next = (N | Z) ? 2'b11 : 0;
                 B_link = 0;
             end
-            6'b000101: begin // BGTZ; branch if rs > 0
+            6'b000111: begin // BGTZ; branch if rs > 0
                 jump_addr_selection_next = (!N & !Z) ? 2'b11 : 0;
                 B_link = 0;
             end
