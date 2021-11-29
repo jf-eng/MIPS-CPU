@@ -4,11 +4,16 @@
 	ARCH h
 	ASSERT 32'h38B39980
 
+
 .text
-	ADDIU $1 $0 #120000
-	ADDIU $2 $0 #330050
+	LW $1 op1
+	LW $2 op2
 	MULTU $1 $2
 	MFLO $2
 	JR $0
 
+
 .data
+    op1 #120000
+    op2 #330050
+	

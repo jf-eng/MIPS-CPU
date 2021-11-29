@@ -3,6 +3,7 @@
 .config
 	ARCH h
 	ASSERT 32'h9
+	
 
 .text
 	LW $1 op1
@@ -10,6 +11,7 @@
 	MULTU $1 $2
 	MFHI $2
 	JR $0
+
 
 .data
     op1 #120000
