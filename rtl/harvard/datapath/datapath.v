@@ -48,7 +48,11 @@ module datapath(
     always_comb begin
         if(B_link) begin
             write_data = instr_address + 8; // PC + 8
-            write_addr = 32'd31; // $31
+            if(RegDst) begin // high for JALR (all other B_link instructions has RegDst = 0)
+                write_addr = rd;
+            end else begin
+                write_addr = 32'd31; // $31 for all other B_link instructions
+            end
         end else begin
             write_data = (MemtoReg) ? data_readdata : alu_out;
             write_addr = (RegDst) ? rd : rt;
@@ -58,7 +62,7 @@ module datapath(
     logic [4:0] read_addr_0, read_addr_1;
     logic SH;
 
-    assign SH = (SL | SR) & RegDst;
+    assign SH = (SL | SR) & RegDst; //control signal to differentiate between LUI and shift instruction where rs and rt are swapped
     assign read_addr_0 = (SH) ? rt : rs;
     assign read_addr_1 = (SH) ? rs : rt;
 
