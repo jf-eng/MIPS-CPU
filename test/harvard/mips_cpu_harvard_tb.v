@@ -39,8 +39,8 @@ module mips_cpu_harvard_tb (
 
     // CLK
     initial begin
-        // $dumpfile("mips_cpu_harvard_tb.vcd");
-        // $dumpvars(0, mips_cpu_harvard_tb);
+        $dumpfile("mips_cpu_harvard_tb.vcd");
+        $dumpvars(0, mips_cpu_harvard_tb);
         clk = 0;
         repeat (600) begin
             #2;
@@ -92,8 +92,8 @@ module mips_cpu_harvard_tb (
 
     // TESTING
     initial begin
-        // $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
-        //         $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
+        $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
+                 $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
 
         reset = 0;
         @(negedge clk);
