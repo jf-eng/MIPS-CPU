@@ -2,6 +2,7 @@
 
 INSTR="$1"
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 NC='\033[0m'
 ASM_FILES=$(ls ./$INSTR/*.s)
 
@@ -61,18 +62,17 @@ for file in $ASM_FILES; do
 	# Run (Cannot run from here, must run in the folder itself for some reason)
 	cd $INSTR
 
-	./$STRIPPED 
-	#&> /dev/null
+	./$STRIPPED &> /dev/null
 
 	# Check Pass/Fail
 	if [[ $? -ne 0 ]]; then
-		echo $STRIPPED $INSTR Fail
+		echo -e "${RED}$STRIPPED $INSTR Fail${NC}"
 	else
-		echo $STRIPPED $INSTR Pass
+		echo -e "${GREEN}$STRIPPED $INSTR Pass${NC}"
 	fi
 
 	# remove the files
-	rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v
+	rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v mips_cpu_harvard_tb.vcd
 
 	cd ..
 

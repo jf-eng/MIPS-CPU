@@ -2,7 +2,7 @@ module alu(
 	input logic clk,
 	input logic [31:0] op1, op2,
 	input logic Add, Sub, Mul, Div, Unsigned, WriteHi, WriteLo, ReadHi, ReadLo,
-	input logic Or, And, Xor, Sl, Sr, Arithmetic, Boolean,
+	input logic Or, And, Xor, Sl, Sr, Arithmetic, Boolean, LUI,
 	output logic [31:0] alu_out,
 	output logic n, z, eq
 );
@@ -40,7 +40,11 @@ always_comb begin
 	end
 
 	if(Sl) begin
-		alu_out = op1 << op2;
+		if(LUI) begin
+			alu_out = op2 << 16;
+		end else begin
+			alu_out = op1 << op2;
+		end
 	end
 
 	if(Sr) begin
