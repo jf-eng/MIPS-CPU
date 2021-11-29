@@ -1,6 +1,6 @@
 .config
     ARCH h
-    ASSERT 32'hc
+    ASSERT 32'hFFFFFFFD
 
 .text
         ADDIU $1 $0 #21
@@ -8,6 +8,8 @@
         ADDIU $1 $0 #3
         SUBU $2 $2 $1
         SUBU $2 $2 $1
+        SUBU $2 $2 $1
+        ADDIU $1 $0 #15
         SUBU $2 $2 $1
 		JR $0
 

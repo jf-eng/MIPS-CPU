@@ -1,6 +1,6 @@
 .config
 	ARCH h
-	ASSERT 32'h3
+	ASSERT 32'hFFFFFFFF
 
 .text
         ADDIU $1 $0 #4
