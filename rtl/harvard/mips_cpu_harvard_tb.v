@@ -45,7 +45,7 @@ module mips_cpu_harvard_tb ();
             #2;
             clk = !clk;
         end
-        $fatal(2, "Simulation ended in 100 clock cycles");
+        $fatal(1, "Simulation ended in 100 clock cycles");
     end
 
     // RAM & ROM
