@@ -185,8 +185,10 @@ def parse_line(line, line_ind, jump_labels, data_table):
 
 # Assembles every file
 def assemble(filepath):
+	
 	f = open(filepath, 'r')
 	lines = [l[:l.find("//")] for l in f.readlines()] # removes comments
+	print(lines)
 	lines = [l.strip() for l in lines] # strips whitespace & gets lines
 	lines = [v for v in lines if v != ""]
 	# Do first pass on all lines
