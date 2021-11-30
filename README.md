@@ -1,4 +1,7 @@
-# EE2-MIPS-CPU
+# EE2-MIPS-CPU TESTS BRANCH
 
-## Assembler
-Source code on assembler branch: https://gitlab.com/verilog-lab/ee2-mips-cpu/-/tree/assembler
+This is the branch where the tests are conducted on the built CPU in branch:main.
+
+The testing is automated using a custom assembler and bash scripts.
+
+Source code for assembler is on the assembler branch: https://gitlab.com/verilog-lab/ee2-mips-cpu/-/tree/assembler
