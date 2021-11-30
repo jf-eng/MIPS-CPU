@@ -1,6 +1,8 @@
+// ZERO extend check
+
 .config
 	ARCH h
-	ASSERT 32'hFFFF8000
+	ASSERT 32'h00008000
 
 .text
 		ADDIU $2 $0 #0x8000

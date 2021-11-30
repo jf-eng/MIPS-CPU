@@ -6,8 +6,9 @@
 	ASSERT 32'hD2F1894B
 
 .text
-	ADDIU $1 $0 #0xD2F1ACB0
+	LW $1 0($0) 
 	XORI $2 $1 #0x25FB
 	JR $0
 
 .data
+	#0xD2F1ACB0

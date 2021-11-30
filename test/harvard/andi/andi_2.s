@@ -1,6 +1,6 @@
 .config
 	ARCH h
-	ASSERT 32'hFFFFC220
+	ASSERT 32'h0000C220
 
 .text
 		ADDIU $2 $0 #0xC678

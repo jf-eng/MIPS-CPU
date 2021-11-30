@@ -1,3 +1,5 @@
+// simple AND check
+
 .config
 	ARCH h
 	ASSERT 32'h10

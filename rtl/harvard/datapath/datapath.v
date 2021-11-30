@@ -87,7 +87,8 @@ module datapath(
 
     always @(*) begin
         if(ALUSrc) begin
-            op2 = (ShiftAmt) ? {{27{shamt[4]}}, shamt} : {{16{alu_immediate[15]}}, alu_immediate}; //sign extension of shamt or alu_immediate
+            op2 = (ShiftAmt) ? {{27{shamt[4]}}, shamt} : // sign extension of shamt
+                (Xor | And | Or) ? {16'h0000, alu_immediate} : {{16{alu_immediate[15]}}, alu_immediate};  // sign or zero extend of alu_immediate
         end else begin
             op2 = read_data_1;
         end

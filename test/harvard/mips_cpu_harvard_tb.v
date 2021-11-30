@@ -39,8 +39,8 @@ module mips_cpu_harvard_tb (
 
     // CLK
     initial begin
-        $dumpfile("mips_cpu_harvard_tb.vcd");
-        $dumpvars(0, mips_cpu_harvard_tb);
+        // $dumpfile("mips_cpu_harvard_tb.vcd");
+        // $dumpvars(0, mips_cpu_harvard_tb);
         clk = 0;
         repeat (600) begin
             #2;

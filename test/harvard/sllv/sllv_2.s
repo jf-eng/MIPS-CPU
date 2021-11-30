@@ -1,14 +1,13 @@
-// 32'b1011 1111 1101 1011 0010 1010 1001 1000 (32'hBFDB2A98) << 1 = 32'b0111 1111 1011 0110 0101 0101 0011 0000 (32'h7FB65530)
-// Edge case as MSB of 1 is shifted out, meaning rd =/= rt * 2^rs
+// transfers value of 7 into $3 and 4 into $1 using addiu instruction, sllv then should load 7 * 2^4 = 112 into $2, but fails
 
 .config
 	ARCH h
-	ASSERT 32'h7FB65530
+	ASSERT 112
 
 .text
-	ADDIU $3 $0 #0xBFDB2A98
-    ADDIU $1 $0 #1
-    SLLV $2 $3 $1
+	ADDIU $2 $0 #7
+    ADDIU $1 $0 #4
+    SLLV $2 $2 $1
 	JR $0
 
 .data
