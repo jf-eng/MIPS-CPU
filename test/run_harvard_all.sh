@@ -3,7 +3,10 @@
 # echo "Found $(find */ -maxdepth 0 -type d | wc -l) instructions."
 # echo "Found $(find */*.s | wc -l) tests."
 
-for d in */ ; do
-	./run_harvard_instr.sh ${d::-1}
+RTLPATH="$1"
+
+for d in ./harvard/*/ ; do
+	INSTR=`basename $d /`
+	./run_harvard_instr.sh $RTLPATH $INSTR
 done
 

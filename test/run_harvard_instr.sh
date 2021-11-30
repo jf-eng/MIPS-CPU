@@ -1,16 +1,18 @@
 #!/bin/bash
 
-INSTR="$1"
+RTLPATH="$1"
+INSTR="$2"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 
-if [[ $# -eq 0 ]]; then
-	echo "Please provide an instruction to test."
+if [[ $# -le 1 ]]; then
+	echo "Please provide a path & instruction to test."
 	exit 2
 fi
 
-ASM_FILES=$(ls ./$INSTR/*.s)
+ASM_FILES=$(ls ./harvard/$INSTR/*.s)
 
 
 for file in $ASM_FILES; do
@@ -30,7 +32,7 @@ for file in $ASM_FILES; do
 	STRIPPED=$(basename $file .s)
 
 	# Compile entire CPU w/ testbench & instruction to test
-	iverilog -Wall -g 2012 -s $STRIPPED -o ./$INSTR/$STRIPPED mips_cpu_harvard_tb.v ./$INSTR/$STRIPPED.v $(find ./../../rtl/harvard -name "*.v") &> comp_err.log
+	iverilog -Wall -g 2012 -s $STRIPPED -o ./harvard/$INSTR/$STRIPPED ./harvard/mips_cpu_harvard_tb.v ./harvard/$INSTR/$STRIPPED.v $(find $RTLPATH -name "*.v") &> comp_err.log
 
 	if [[ $? -ne 0 ]]; then
 		echo -e "${RED}ERROR compiling ${file}${NC}"
@@ -41,7 +43,7 @@ for file in $ASM_FILES; do
 	rm comp_err.log
 
 	# Run (Cannot run from here, must run in the folder itself for some reason)
-	cd $INSTR
+	cd harvard/$INSTR
 
 	./$STRIPPED &> /dev/null
 
@@ -55,6 +57,6 @@ for file in $ASM_FILES; do
 	# remove the files
 	rm -rf $STRIPPED $STRIPPED.ram $STRIPPED.rom $STRIPPED.v mips_cpu_harvard_tb.vcd
 
-	cd ..
+	cd ../..
 
 done
