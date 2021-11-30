@@ -39,8 +39,8 @@ module mips_cpu_harvard_tb (
 
     // CLK
     initial begin
-        // $dumpfile("mips_cpu_harvard_tb.vcd");
-        // $dumpvars(0, mips_cpu_harvard_tb);
+        $dumpfile("mips_cpu_harvard_tb.vcd");
+        $dumpvars(0, mips_cpu_harvard_tb);
         clk = 0;
         repeat (600) begin
             #2;
@@ -81,19 +81,28 @@ module mips_cpu_harvard_tb (
 
     assign instr_readdata = (instr_address[31:8] == 24'hBFC000) ? rom[rom_wordaddr] :
             (data_address == 0) ? 0 : 32'hxxxxxxxx;
-    assign data_readdata = (data_read && data_address[31:8] == 24'h000000) ? ram[ram_wordaddr] : 32'hxxxxxxxx;
+    assign data_readdata = (data_read && (data_address[31:8] == 24'h000000)) ? ram[ram_wordaddr] : 32'hxxxxxxxx;
 
     // RAM WRITE
-    always_ff @(posedge clk) begin
-        if(data_write && data_address[31:8] == 24'h000000) begin
-            ram[data_address[7:0]] <= data_writedata;
+    always_ff @(negedge clk) begin
+        if(data_write && (data_address[31:8] == 24'h000000)) begin
+            $display("Ram Written");
+            ram[ram_wordaddr] <= data_writedata;
         end
     end
 
+
+    logic [31:0] ram_0, ram_4, ram_8, ram_12, ram_16;
+    assign ram_0 = ram[0];
+    assign ram_4 = ram[1];
+    assign ram_8 = ram[2];
+    assign ram_12 = ram[3];
+    assign ram_16 = ram[4];
+
     // TESTING
     initial begin
-        // $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
-        //          $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
+        $monitor("Time %t:\n[ROM] PC: %h, WordADDR: %h, Instruction: %h\n[CPU] Active: %d, Register_v0 ($2): %h",
+                 $time, instr_address, rom_wordaddr, instr_readdata, active, register_v0);
 
         reset = 0;
         @(negedge clk);

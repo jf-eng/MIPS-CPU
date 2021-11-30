@@ -14,9 +14,9 @@ logic [31:0] lo, hi;
 assign op1_s = op1;
 assign op2_s = op2;
 
-logic [31:0] subtractedUnsigned, subtractedSigned;
-assign subtractedUnsigned = op1-op2;
-assign subtractedSigned = op1[30:0] - op2[30:0];
+// logic [31:0] subtractedUnsigned, subtractedSigned;
+// assign subtractedUnsigned = op1-op2;
+// assign subtractedSigned = op1[30:0] - op2[30:0];
 
 always_comb begin
 	if(Add) begin
@@ -66,18 +66,25 @@ always_comb begin
 end
 
 always @(*) begin //in always * because bit select not supported in always_comb
-	if(Boolean) begin
-		if(Unsigned || !(op1[31] && op2[31])) begin //want to subtract if we are either working with unsigned numbers or at least one signed number is positive
-			alu_out = {
-					31'h00000000,
-					subtractedUnsigned[31]
-				}; //put 31 0s on front of msb of op1 - op2
+	if(Boolean) begin // SLT SLTU SLTI SLTIU instruction
+		if (Unsigned) begin
+			alu_out = {31'h0, (op1 < op2)};
 		end else begin
-			alu_out = {
-					31'h00000000,
-					subtractedSigned[31]
-				}; //put 31 0s on front of msb of 30 lsb bits of op1 - 30 lsb bits of op2
+			alu_out = {31'h0, (op1_s < op2_s)};
 		end
+
+
+		// if(Unsigned || !(op1[31] && op2[31])) begin //want to subtract if we are either working with unsigned numbers or at least one signed number is positive
+		// 	alu_out = {
+		// 			31'h00000000,
+		// 			subtractedUnsigned[31]
+		// 		}; //put 31 0s on front of msb of op1 - op2
+		// end else begin
+		// 	alu_out = {
+		// 			31'h00000000,
+		// 			subtractedSigned[31]
+		// 		}; //put 31 0s on front of msb of 30 lsb bits of op1 - 30 lsb bits of op2
+		// end
 	end
 
 	

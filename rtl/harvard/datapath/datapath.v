@@ -14,6 +14,7 @@ module datapath(
     input logic[4:0] rs,
     output logic[31:0] read_data_0,
     output logic[31:0] register_v0,
+    output logic[31:0] data_writedata,
 
     // alu
     input logic ALUSrc,
@@ -59,6 +60,8 @@ module datapath(
             write_addr = (RegDst) ? rd : rt;
         end
     end
+
+    assign data_writedata = read_data_1;
 
     logic [4:0] read_addr_0, read_addr_1;
     logic SH;

@@ -159,7 +159,8 @@ module mips_cpu_harvard(
         .Z(Z),
         .EQ(EQ),
         .alu_out(data_address),
-        .LUI(LUI)
+        .LUI(LUI),
+        .data_writedata(data_writedata)
     );
 
 
