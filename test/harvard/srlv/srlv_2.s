@@ -1,13 +1,11 @@
-// transfers value of 7 into $3 and 4 into $1 using addiu instruction, sllv then should load 7 * 2^4 = 112 into $2, but fails
-
 .config
 	ARCH h
-	ASSERT 427
+	ASSERT 156
 
 .text
-	ADDIU $2 $0 #54783
-  ADDIU $1 $0 #7
-  SRLV $2 $2 $1
+	ADDIU $2 $0 #20000 // $2 = #0b100111000100000
+	ADDIU $1 $0 #7     // $1 = #7
+	SRLV $2 $2 $1      // $2 = #0b10011100 = #156
 	JR $0
 
 .data
