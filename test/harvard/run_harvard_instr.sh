@@ -62,7 +62,7 @@ for file in $ASM_FILES; do
 	# Run (Cannot run from here, must run in the folder itself for some reason)
 	cd $INSTR
 
-	./$STRIPPED  &> /dev/null
+	./$STRIPPED &> /dev/null
 
 	# Check Pass/Fail
 	if [[ $? -ne 0 ]]; then
