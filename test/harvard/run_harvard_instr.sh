@@ -4,32 +4,13 @@ INSTR="$1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+
+if [[ $# -eq 0 ]]; then
+	echo "Please provide an instruction to test."
+	exit 2
+fi
+
 ASM_FILES=$(ls ./$INSTR/*.s)
-
-
-# # Options not bothered to implement
-# while getopts "vkf:" options; do
-
-# 	case "${options}" in
-# 		v)
-# 			VERBOSE=1
-# 			echo "SET verbose"
-# 			;;
-# 		k)
-# 			KEEP_FILES=1
-# 			echo "SET keep"
-# 			;;
-# 		f)
-# 			FILENAME=""
-# 			echo "SET file TO ${OPTARG}"
-# 	esac
-
-# done
-
-# if [[ -z FILENAME ]]; then
-# 	echo "Please provide file name -f <name>"
-# 	exit 2
-# fi
 
 
 for file in $ASM_FILES; do
