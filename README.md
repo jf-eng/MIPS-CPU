@@ -1,13 +1,11 @@
-<<<<<<< HEAD
 # EE2-MIPS-CPU MAIN BRANCH
 
 This branch is where the CPU gets built.
 
 ## Testbenches
-Tests are conducted on the tests branch: https://gitlab.com/verilog-lab/ee2-mips-cpu/-/tree/tests
-=======
+Tests are conducted on the tests branch: https://gitlab.com/verilog-lab/ee2-mips-cpu/-/tree/
+
 # EE2-MIPS-CPU TESTS BRANCH
->>>>>>> tests
 
 This is the branch where the tests are conducted on the built CPU in branch:main.
 
