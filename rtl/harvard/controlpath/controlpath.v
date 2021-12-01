@@ -44,7 +44,8 @@ module controlpath(
     output logic ReadHi,
     output logic ReadLo,
     output logic WriteHi,
-    output logic WriteLo
+    output logic WriteLo,
+    output logic LUI
 );
     // State machine
     logic state;
@@ -117,7 +118,8 @@ module controlpath(
         .WriteLo(WriteLo),
         .WriteHi(WriteHi),
         .ReadLo(ReadLo),
-        .ReadHi(ReadHi)
+        .ReadHi(ReadHi),
+        .LUI(LUI)
     );
 
 endmodule

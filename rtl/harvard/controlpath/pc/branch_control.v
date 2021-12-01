@@ -32,7 +32,7 @@ module branch_control(
         case (instruction_word[31:26]) // opcodes
             0: begin
                 if (instruction_word[5:0] == 6'b001001) begin // JALR
-                    jump_addr_selection_next = 2'b01; B_link = 0; // B_link is set 0 here so that Rd is fed into reg_write_address; RegWrite should = 1 in control.v
+                    jump_addr_selection_next = 2'b01; B_link = 1; // B_link is set 1 here; JALR is the only link instruction with RegDst = 1 so that rd is fed as write_addr instead of $31
                 end
                 else if (instruction_word[5:0] == 6'b001000) begin // JR
                     jump_addr_selection_next = 2'b01; B_link = 0; 
@@ -80,8 +80,8 @@ module branch_control(
                 jump_addr_selection_next = (N | Z) ? 2'b11 : 0;
                 B_link = 0;
             end
-            6'b000101: begin // BGTZ; branch if rs > 0
-                jump_addr_selection_next = (!N) ? 2'b11 : 0;
+            6'b000111: begin // BGTZ; branch if rs > 0
+                jump_addr_selection_next = (!N & !Z) ? 2'b11 : 0;
                 B_link = 0;
             end
             default: begin // otherwise, dont jump

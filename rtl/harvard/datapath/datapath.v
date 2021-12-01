@@ -14,6 +14,7 @@ module datapath(
     input logic[4:0] rs,
     output logic[31:0] read_data_0,
     output logic[31:0] register_v0,
+    output logic[31:0] data_writedata,
 
     // alu
     input logic ALUSrc,
@@ -36,6 +37,7 @@ module datapath(
     input logic Boolean,
     input logic ReadHi,
     input logic ReadLo,
+    input logic LUI,
     output logic N,
     output logic Z,
     output logic EQ,
@@ -48,12 +50,26 @@ module datapath(
     always_comb begin
         if(B_link) begin
             write_data = instr_address + 8; // PC + 8
-            write_addr = 32'd31; // $31
+            if(RegDst) begin // high for JALR (all other B_link instructions has RegDst = 0)
+                write_addr = rd;
+            end else begin
+                write_addr = 32'd31; // $31 for all other B_link instructions
+            end
         end else begin
             write_data = (MemtoReg) ? data_readdata : alu_out;
             write_addr = (RegDst) ? rd : rt;
         end
     end
+
+    assign data_writedata = read_data_1;
+
+    logic [4:0] read_addr_0, read_addr_1;
+    logic SH;
+
+    assign SH = (SL | SR) & RegDst; //control signal to differentiate between LUI and shift instruction where rs and rt are swapped
+    assign read_addr_0 = (SH) ? rt : rs;
+    assign read_addr_1 = (SH) ? rs : rt;
+
 
     regfile regfile_block(
         .clk(clk),
@@ -61,8 +77,8 @@ module datapath(
         .reset(reset),
         .write_data(write_data),
         .write_addr(write_addr),
-        .read_addr_0(rs),
-        .read_addr_1(rt),
+        .read_addr_0(read_addr_0),
+        .read_addr_1(read_addr_1),
         .read_data_0(read_data_0),
         .read_data_1(read_data_1),
         .register_v0(register_v0)
@@ -71,9 +87,11 @@ module datapath(
     // ALU
     logic[31:0] op2;
 
+
     always @(*) begin
         if(ALUSrc) begin
-            op2 = (ShiftAmt) ? {{27{shamt[4]}}, shamt} : {{16{alu_immediate[15]}}, alu_immediate}; //sign extension of shamt or alu_immediate
+            op2 = (ShiftAmt) ? {{27{shamt[4]}}, shamt} : // sign extension of shamt
+                (Xor | And | Or) ? {16'h0000, alu_immediate} : {{16{alu_immediate[15]}}, alu_immediate};  // sign or zero extend of alu_immediate
         end else begin
             op2 = read_data_1;
         end
@@ -101,6 +119,7 @@ module datapath(
         .n(N),
         .z(Z),
         .eq(EQ),
+        .LUI(LUI),
         .ReadHi(ReadHi),
         .ReadLo(ReadLo)
     );

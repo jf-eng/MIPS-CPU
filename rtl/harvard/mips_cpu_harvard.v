@@ -55,6 +55,7 @@ module mips_cpu_harvard(
     logic N;
     logic Z;
     logic EQ;
+    logic LUI;
     logic[31:0] alu_out;
 
     // IR block
@@ -63,7 +64,7 @@ module mips_cpu_harvard(
     logic finish;
 
     // Control block
-    // logic R31;
+    logic R31;
 
 //     // ACTIVE LATCH
     always_ff @(posedge clk) begin
@@ -112,7 +113,8 @@ module mips_cpu_harvard(
         .ReadHi(ReadHi),
         .ReadLo(ReadLo),
         .WriteHi(WriteHi),
-        .WriteLo(WriteLo)
+        .WriteLo(WriteLo),
+        .LUI(LUI)
     );
 
     datapath datapathblock(
@@ -156,7 +158,9 @@ module mips_cpu_harvard(
         .N(N),
         .Z(Z),
         .EQ(EQ),
-        .alu_out(data_address)
+        .alu_out(data_address),
+        .LUI(LUI),
+        .data_writedata(data_writedata)
     );
 
 
