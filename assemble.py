@@ -197,6 +197,9 @@ def assemble(filepath):
 		print("Please include .config .text & .data labels in your code.")
 		exit(1)
 
+	lines.insert(lines.index(".data"), "NOP")
+	print(lines)
+
 	dot_indexes = {}
 	jump_labels = {}
 
