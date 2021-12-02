@@ -188,7 +188,6 @@ def assemble(filepath):
 	
 	f = open(filepath, 'r')
 	lines = [l[:l.find("//")] for l in f.readlines()] # removes comments
-	print(lines)
 	lines = [l.strip() for l in lines] # strips whitespace & gets lines
 	lines = [v for v in lines if v != ""]
 	# Do first pass on all lines
@@ -310,7 +309,34 @@ endmodule
 			print("Data output appended to " + outpath + ".ram")
 		
 		outF.close()
+		
+		if "ASSERT" in config_table: # if assert is a key
+			verilogF = open(outpath + ".v", 'w')
+			verilogF.write(
+f"""
+module {outname} ();
+	
+    logic active;
+    logic[31:0] register_v0;
 
+    mips_cpu_bus_tb #(
+        .RAM_INIT_FILE("{outname}.ram")
+    ) TB (
+        .active(active),
+        .register_v0(register_v0)
+    );
+
+    initial begin
+        @(negedge active);
+        assert(register_v0 == {config_table["ASSERT"]}) else $fatal(1); 
+        $finish;
+    end
+
+endmodule
+"""
+)
+			print("Generated Testbench at " + outpath + ".v")
+			verilogF.close()
 
 	f.close()
 	

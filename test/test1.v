@@ -4,8 +4,7 @@ module test1 ();
     logic active;
     logic[31:0] register_v0;
 
-    mips_cpu_harvard_tb #(
-        .ROM_INIT_FILE("test1.rom"),
+    mips_cpu_bus_tb #(
         .RAM_INIT_FILE("test1.ram")
     ) TB (
         .active(active),
