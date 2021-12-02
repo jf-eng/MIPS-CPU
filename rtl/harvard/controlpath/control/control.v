@@ -33,17 +33,17 @@ module control (
     output logic ReadLo,
     output logic ReadHi,
     output logic LUI
-);
+);  
+    logic LW;
                     /*RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ShiftAmt = 0; R31 = 0;
                     Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end*/
     always_comb begin
-        if (!state) begin 
+        if (!state && !stall) begin 
             RegDst = 0;
-            MemRead = 0;
-            MemtoReg = 1; 
+            MemRead = 1;
+            MemtoReg = 0; 
             MemWrite = 0; 
             ALUSrc = 0; 
-            RegWrite = 0; 
             ShiftAmt = 0; 
             R31 = 0;
             Add = 0; 
@@ -59,8 +59,20 @@ module control (
             Arithmetic = 0; 
             Boolean = 0;
             WriteLo = 0;
-            WriteHi = 0; 
+            WriteHi = 0;
+            if (LW) begin
+                RegWrite = 1; 
             end
+            else begin
+                Regwrite = 0;
+            end
+        end
+        else if (stall && !state) begin
+            RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ShiftAmt = 0; R31 = 0;
+            Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; WriteLo = 0; WriteHi = 0; ReadLo = 0; ReadHi = 0; LUI = 0; end
+
+        
+        end
         else begin
             if (instruction_opcode == 0) begin
                 casex  (func_code)
@@ -204,7 +216,7 @@ module control (
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 1; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; WriteLo = 0; WriteHi = 0; ReadLo = 0; ReadHi = 0; LUI = 0; end
                 
                     6'b001111 : begin // LUI(how does ALU know that SL is by 16-bits?)
-                        RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 1; RegWrite = 1; ShiftAmt = 0; R31 = 0;
+                        RegDst = 0; MemRead = 0; MemtoReg = 1; MemWrite = 0; ALUSrc = 1; RegWrite = 1; ShiftAmt = 0; R31 = 0;
                         Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 1; SR = 0; Arithmetic = 0; Boolean = 0; WriteLo = 0; WriteHi = 0; ReadLo = 0; ReadHi = 0; LUI = 1; end
                 
                     6'b100011 : begin // LW
@@ -214,7 +226,7 @@ module control (
                     6'b101011 : begin // SW
                         RegDst = 1'bx; MemRead = 0; MemtoReg = 1'bx; MemWrite = 1; ALUSrc = 1; RegWrite = 0; ShiftAmt = 0; R31 = 0;
                         Add = 1; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; WriteLo = 0; WriteHi = 0; ReadLo = 0; ReadHi = 0; LUI = 0; end
-                
+
                     default : begin
                         RegDst = 1'bx; MemRead = 1'bx; MemtoReg = 1'bx; MemWrite = 1'bx; ALUSrc = 1'bx; RegWrite = 1'bx; ShiftAmt = 1'bx; R31 = 1'bx;
                         Add = 1'bx; Sub = 1'bx; Mul = 1'bx; Div = 1'bx; Unsigned = 1'bx; Or = 1'bx; And = 1'bx; Xor = 1'bx; SL = 1'bx; SR = 1'bx; Arithmetic = 1'bx; Boolean = 1'bx; WriteLo = 1'bx; WriteHi = 1'bx; ReadLo = 1'bx; ReadHi = 1'bx; LUI = 1'bx;end  
