@@ -86,7 +86,7 @@ module mips_cpu_harvard_tb (
     // RAM WRITE
     always_ff @(negedge clk) begin
         if(data_write && (data_address[31:8] == 24'h000000)) begin
-            $display("Ram Written");
+            // $display("Ram Written");
             ram[ram_wordaddr] <= data_writedata;
         end
     end
