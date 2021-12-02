@@ -48,8 +48,7 @@ module datapath(
     input logic LUI,
     output logic N,
     output logic Z,
-    output logic EQ,
-    output logic[31:0] alu_out
+    output logic EQ
 );
     /* Store & Load 'blocks' are just 1 always_comb block below
     Store "block" - Used for all store instructions
@@ -209,7 +208,7 @@ module datapath(
     logic [4:0] read_addr_0, read_addr_1;
     logic SH;
 
-    assign SH = (SL | SR) & RegDst; //control signal to differentiate between LUI and shift instruction where rs and rt are swapped
+    assign SH = (SL | SR) & RegDst; // control signal to differentiate between LUI and shift instruction where rs and rt are swapped
     assign read_addr_0 = (SH) ? rt : rs;
     assign read_addr_1 = (SH) ? rs : rt;
 
@@ -232,7 +231,7 @@ module datapath(
     );
 
     // ALU
-    logic[31:0] op2;
+    logic[31:0] op2, alu_out;
 
 
     always @(*) begin
