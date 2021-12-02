@@ -37,7 +37,12 @@ module mips_cpu_bus(
         if(!state) begin // for FETCH
             address = instr_address;
         end else begin // for EXEC
-            address = (write) ? data_writeaddr : data_readaddr;
+            if(read) begin
+                address = data_readaddr;
+            end
+            if (write) begin
+                address = data_writeaddr;
+            end
         end
     end
 
