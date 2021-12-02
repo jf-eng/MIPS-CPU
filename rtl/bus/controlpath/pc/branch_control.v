@@ -103,8 +103,6 @@ module branch_control(
     always_ff @(posedge clk) begin
         if (state) begin // update jump_addr_selection at end of EXEC (edge case is jump/branch instruction, LW (stall))
             jump_addr_selection <= jump_addr_selection_next;
-        end else begin
-            jump_addr_selection <= jump_addr_selection;
         end
     end
 endmodule
