@@ -84,6 +84,16 @@ module mips_cpu_bus_tb (
             4'b1000: ram_write_data = { writedata[31:24], ram[ram_wordaddr][23:0] };
             4'b0011: ram_write_data = { ram[ram_wordaddr][31:16], writedata[15:0] };
             4'b1100: ram_write_data = { writedata[31:16], ram[ram_wordaddr][15:0] };
+            
+            // 1000
+            // 1100
+            // 1110
+
+            // 0001
+            // 0011
+            // 0111
+
+
             4'b1111: ram_write_data = writedata;
             default: ram_write_data = writedata;
         endcase
