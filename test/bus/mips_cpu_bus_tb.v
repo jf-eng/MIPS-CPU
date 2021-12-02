@@ -90,18 +90,15 @@ module mips_cpu_bus_tb (
     end
 
     always_ff @(posedge clk) begin
-        
         // if wait request not high, can process read/write 
         if(!waitrequest) begin
             if(read) begin
                 readdata <= ram[ram_wordaddr];
             end
-
             if(write) begin
                 ram[ram_wordaddr] <= ram_write_data;
             end
         end
-
         // random wait signal
         waitrequest = $random();
 
@@ -119,8 +116,6 @@ module mips_cpu_bus_tb (
         reset = 0;
 
         @(negedge active); // wait until cpu ends
-
     end
-
 
 endmodule
