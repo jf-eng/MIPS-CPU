@@ -37,8 +37,8 @@ module control (
     logic LI;
                     /*RegDst = 0; MemRead = 0; MemtoReg = 0; MemWrite = 0; ALUSrc = 0; RegWrite = 0; ShiftAmt = 0; R31 = 0;
                     Add = 0; Sub = 0; Mul = 0; Div = 0; Unsigned = 0; Or = 0; And = 0; Xor = 0; SL = 0; SR = 0; Arithmetic = 0; Boolean = 0; end*/
-    always_comb begin
-        if(instruction_opcode[5:3] = 3'b100) begin
+    always @(*) begin
+        if(instruction_opcode[5:3] == 3'b100) begin
             LI = 1;
         end
         else begin
@@ -70,13 +70,11 @@ module control (
                 MemtoReg = 1;
             end
             else begin
-                Regwrite = 0;
+                RegWrite = 0;
                 MemtoReg = 0;
             end
         end
 
-        
-        end
         else begin
             if (instruction_opcode == 0) begin
                 casex  (func_code)
