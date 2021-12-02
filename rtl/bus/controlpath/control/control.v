@@ -26,7 +26,7 @@ module control (
     output logic SR,
     output logic Arithmetic,
     output logic Boolean,
-    //output logic R31,
+    //output logic R31, has been removed
     output logic ShiftAmt,
     output logic WriteLo,
     output logic WriteHi,
