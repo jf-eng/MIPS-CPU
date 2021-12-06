@@ -206,13 +206,17 @@ def assemble(filepath):
 	dot_indexes = {}
 	jump_labels = {}
 
+	instr_word_count = 0
+	instructions = lines[lines.index(".text")+1:lines.index(".data")]
+	for i in instructions:
+		if i[-1] != ":": # jump label
+			instr_word_count += 1
 
-	instr_word_count = lines.index(".data") - lines.index(".text") - 1
 	print(instr_word_count)
 
 	lines[lines.index(".text")+1:lines.index(".text")+1] = [
 		"LUI $sp #0xBFC0", 
-		f"ADDIU $gp $sp #{(instr_word_count+4)*4 - 4}", 
+		f"ADDIU $gp $sp #{(instr_word_count+4)*4}", 
 		"ADDIU $sp $sp #255",
 		"ADDU $fp $fp $sp",
 	]

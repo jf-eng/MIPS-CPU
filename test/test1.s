@@ -1,15 +1,14 @@
 .config
-	ARCH v
-	ASSERT 60
+    ARCH v
+    ASSERT 1
 
 .text
-	LW $v0 #4($gp)
-	LW $v0 b
-	ADDIU $sp $sp #4
-	JR $0
+    LW $1 one
+    LW $3 two
+    JR $0
+    ADDU $2 $1 $3
 
 .data
-	a #1
-	b #2
-	c #60
-
+    one #0xFFFFFFFF
+    two #0x00000002
+	
