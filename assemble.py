@@ -212,7 +212,7 @@ def assemble(filepath):
 
 	lines[lines.index(".text")+1:lines.index(".text")+1] = [
 		"LUI $sp #0xBFC0", 
-		f"ADDIU $gp $sp #{(instr_word_count+4)*4}", 
+		f"ADDIU $gp $sp #{(instr_word_count+4)*4 - 4}", 
 		"ADDIU $sp $sp #255",
 		"ADDU $fp $fp $sp",
 	]
