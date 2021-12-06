@@ -183,13 +183,12 @@ def parse_line(line, line_ind, jump_labels, data_table):
 				offset = process_num(tokens[2][:l], 16)
 				return op(opcode) + base + rt + offset
 			else:
-				return op(opcode) + '0'*5 + rt + int_to_bin(data_table[tokens[2]][1], 14) + "00"
+				return op(opcode) + "11100" + rt + int_to_bin(data_table[tokens[2]][1], 14) + "00"
 
 
 
 # Assembles every file
 def assemble(filepath):
-	
 	f = open(filepath, 'r')
 	lines = [l[:l.find("//")] for l in f.readlines()] # removes comments
 	lines = [l.strip() for l in lines] # strips whitespace & gets lines
@@ -207,6 +206,17 @@ def assemble(filepath):
 	dot_indexes = {}
 	jump_labels = {}
 
+
+	instr_word_count = lines.index(".data") - lines.index(".text") - 1
+	print(instr_word_count)
+
+	lines[lines.index(".text")+1:lines.index(".text")+1] = [
+		"LUI $sp #0xBFC0", 
+		f"ADDIU $gp $sp #{(instr_word_count+4)*4}", 
+		"ADDIU $sp $sp #255",
+		"ADDU $fp $fp $sp",
+	]
+
 	for n, l in enumerate(lines): 
 		# extract indexes of .config, .text, .data
 		if len(l) > 0 and l[0] == ".":
@@ -216,13 +226,11 @@ def assemble(filepath):
 			lines.remove(l)
 			jump_labels[l[:-1]] = n - dot_indexes[".text"] - 1
 	
-
 	config = lines[dot_indexes[".config"]+1:dot_indexes[".text"]]
 	instr = lines[dot_indexes[".text"]+1:dot_indexes[".data"]]
 	data = lines[dot_indexes[".data"]+1:]
-	# print(data)
-	instr_word_count = len(instr)
 
+	
 	config_table = {}
 	for line in config:
 		tokened = line.split()
@@ -236,7 +244,7 @@ def assemble(filepath):
 				data_table[tokened[0]] = (tokened[1], data_ind)
 			elif config_table["ARCH"] == "vonn" or config_table["ARCH"] == "von neumann" or \
 					config_table["ARCH"] == "v":
-				data_table[tokened[0]] = (tokened[1], instr_word_count + data_ind)
+				data_table[tokened[0]] = (tokened[1], data_ind)
 	
 	
 	# Do second pass on instr
