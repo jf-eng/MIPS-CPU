@@ -13,7 +13,7 @@ module test1 ();
 
     initial begin
         @(negedge active);
-        assert(register_v0 == 1) else $fatal(1); 
+        assert(register_v0 == 0) else $fatal(1); 
         $finish;
     end
 

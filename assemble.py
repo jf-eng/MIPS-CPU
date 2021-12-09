@@ -44,9 +44,12 @@ def func(func_code):
 
 def reg(token):
 	t = token.strip()
+	print(t)
 	if t in REGISTER_ALIAS:
+		print(t + " is a register alias")
 		return int_to_bin(int(REGISTER_ALIAS[t].strip('$')), 5)
-	return int_to_bin(int(t.strip('$')), 5)
+	else:
+		return int_to_bin(int(t.strip('$')), 5)
 	
 
 # Branch calculator
