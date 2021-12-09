@@ -340,7 +340,7 @@ module {outname} ();
 	
     logic active;
     logic[31:0] register_v0;
-	parameter WAIT_TYPE;
+	parameter WAIT_TYPE = "";
 
     mips_cpu_bus_tb #(
         .RAM_INIT_FILE("{outname}.ram"),
