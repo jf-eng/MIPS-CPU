@@ -1,0 +1,13 @@
+.config
+	ARCH v
+	ASSERT 32'h7FFFFFFF
+
+.text
+	LUI $1 0x7FFF
+	ADDIU $1 $1 0x7FFF
+	ADDIU $1 $1 0x5000
+	ADDIU $1 $1 0x3000
+	ORI $2 $1 #0x8000
+	JR $0
+
+.data
