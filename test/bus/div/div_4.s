@@ -1,0 +1,14 @@
+// -ve, only remainder
+
+.config
+	ARCH v
+	ASSERT -5
+
+.text
+	ADDIU $1 $0 #0xFFFB //-5
+	ADDIU $2 $0 #0xFFFA //-6
+	DIV $1 $2
+	MFHI $2
+	JR $0
+
+.data

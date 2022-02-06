@@ -1,0 +1,23 @@
+// rs = 32'b1101 0010 1111 0001 1010 1100 1011 0000 (32'hD2F1ACB0), rt = 32'b1100 1010 0000 1110 0010 0101 1111 1011 (32'hCA0E25FB)
+// outcome of AND op should be: rd = 32'b1101 0010 1111 0001 1000 1001 0100 1011 (32'hC20024B0)
+
+.config
+	ARCH v
+	ASSERT 32'hC20024B0
+
+.text
+	LUI $3 #0xD2F2
+	ADDIU $3 $3 #0xACB0
+    LUI $1 #0xCA0E
+	ADDIU $1 $1 #0x25FB
+	AND $2 $3 $1
+	JR $0
+
+.data
+
+
+
+
+
+
+    
